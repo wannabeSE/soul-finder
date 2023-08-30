@@ -12,7 +12,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
+.DS_Store
+/Users/jsamir/Development/soul-finder/backend/.vscode
 ### IntelliJ IDEA ###
 .idea
 *.iws

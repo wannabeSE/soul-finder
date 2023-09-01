@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,13 +16,7 @@ import com.example.soulfinder.soulfinderbackend.Service.VectorDBService;
 
 import io.weaviate.client.WeaviateClient;
 import io.weaviate.client.base.Result;
-
-
-
 import io.weaviate.client.v1.schema.model.Schema;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -61,7 +57,7 @@ public class WeaviateController {
         return ResponseEntity.status(HttpStatus.OK)
         .body(response);
     }
-<<<<<<< HEAD
+
     @PostMapping("/search")
     public void imageSearch(@RequestParam("image") MultipartFile file){
         try {
@@ -71,7 +67,6 @@ public class WeaviateController {
         }
         //VectorDBService.imageSearchVectorDB(file);
     }
-=======
->>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
+
     
 }

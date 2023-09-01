@@ -2,21 +2,15 @@ package com.example.soulfinder.soulfinderbackend.Service;
 
 
 
-<<<<<<< HEAD
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-=======
-import java.io.IOException;
->>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-<<<<<<< HEAD
 import org.apache.commons.io.FileUtils;
-=======
->>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,25 +20,15 @@ import io.weaviate.client.WeaviateClient;
 import io.weaviate.client.base.Result;
 import io.weaviate.client.v1.data.model.WeaviateObject;
 import io.weaviate.client.v1.graphql.model.GraphQLResponse;
-<<<<<<< HEAD
 import io.weaviate.client.v1.graphql.query.argument.NearImageArgument;
-=======
->>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
 import io.weaviate.client.v1.graphql.query.fields.Field;
 
 @Service
 public class VectorDBService {
     
- 
-<<<<<<< HEAD
-    //WeaviateClient client = WeaviateSchema.retConfig();
-    public static String fileEncoder(MultipartFile fl) throws IOException{
-        
-=======
     
     public static String fileEncoder(MultipartFile fl) throws IOException{
-        ;
->>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
+        
         byte [] fileContent = fl.getBytes();
 
         String encodedString = Base64.getEncoder().encodeToString(fileContent);
@@ -85,7 +69,7 @@ public class VectorDBService {
         }
         return result.getResult();
     }
-<<<<<<< HEAD
+
 
     public static void imageSearchVectorDB(MultipartFile file){
         WeaviateClient client = WeaviateSchema.retConfig();
@@ -110,11 +94,24 @@ public class VectorDBService {
             System.out.println(result.getError());
             return;
         }
-        var responseImage = ((Map)((ArrayList)((Map)((Map)result.getResult().getData()).get("Get")).get("Test")).get(0)).get("image");
-        var responseImage2 = ((Map)((ArrayList)((Map)((Map)result.getResult().getData()).get("Get")).get("Test")).get(1)).get("image");
+        var responseImage = ((Map)((ArrayList)((Map)((Map)result
+            .getResult()
+            .getData())
+            .get("Get"))
+            .get("Test"))
+            .get(0))
+            .get("image");
+        var responseImage2 = ((Map)((ArrayList)((Map)((Map)result
+            .getResult()
+            .getData())
+            .get("Get"))
+            .get("Test"))
+            .get(1))
+            .get("image");
+
         try {
-            imageConverter(responseImage.toString(), "1");
-            imageConverter(responseImage2.toString(), "2");
+            imageConverter(responseImage.toString(), "result_1");
+            imageConverter(responseImage2.toString(), "result_2");
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
@@ -123,6 +120,5 @@ public class VectorDBService {
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
         FileUtils.writeByteArrayToFile(new File(img+".jpg"), decodedBytes);
     }
-=======
->>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
+
 }

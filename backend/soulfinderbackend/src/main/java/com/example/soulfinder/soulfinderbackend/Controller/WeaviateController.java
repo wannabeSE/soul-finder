@@ -61,6 +61,7 @@ public class WeaviateController {
         return ResponseEntity.status(HttpStatus.OK)
         .body(response);
     }
+<<<<<<< HEAD
     @PostMapping("/search")
     public void imageSearch(@RequestParam("image") MultipartFile file){
         try {
@@ -70,5 +71,7 @@ public class WeaviateController {
         }
         //VectorDBService.imageSearchVectorDB(file);
     }
+=======
+>>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
     
 }

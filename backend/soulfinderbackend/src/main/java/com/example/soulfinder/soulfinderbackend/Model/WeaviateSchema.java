@@ -18,7 +18,11 @@ public class WeaviateSchema {
         WeaviateClient client = new WeaviateClient(config);
         return client;
     }
+<<<<<<< HEAD
     public void schemaDesign(){
+=======
+    public static void schemaDesign(){
+>>>>>>> f0b500d89890cf7738fd4748697bce4826aeb6a3
         Map<String, Object> img2vec = new HashMap<>();
         HashMap <String, Object> img2vecNeural = new HashMap<>();
         ArrayList <String> imageFields = new ArrayList<>();

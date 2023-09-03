@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from "../styles/index.css"
 
 // Dummy data for posts
 const posts = [

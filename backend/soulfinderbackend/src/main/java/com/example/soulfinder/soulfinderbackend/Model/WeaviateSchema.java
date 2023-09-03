@@ -6,8 +6,6 @@ import java.util.Map;
 
 import io.weaviate.client.Config;
 import io.weaviate.client.WeaviateClient;
-
-
 import io.weaviate.client.base.Result;
 import io.weaviate.client.v1.schema.model.WeaviateClass;
 
@@ -18,7 +16,11 @@ public class WeaviateSchema {
         WeaviateClient client = new WeaviateClient(config);
         return client;
     }
-    public static void schemaDesign(){
+
+
+
+    public void schemaDesign(){
+
         Map<String, Object> img2vec = new HashMap<>();
         HashMap <String, Object> img2vecNeural = new HashMap<>();
         ArrayList <String> imageFields = new ArrayList<>();

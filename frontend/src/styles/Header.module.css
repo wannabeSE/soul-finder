@@ -1,0 +1,43 @@
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+  }
+  
+  .logoContainer {
+    flex: 1;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navContainer {
+    flex: 2;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .navLink {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+  }
+  
+  .authContainer {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .authLink {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+  }

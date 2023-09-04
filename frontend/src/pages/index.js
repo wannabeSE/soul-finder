@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../components/Header';
 
 // Dummy data for posts
 const posts = [
@@ -9,6 +10,7 @@ const posts = [
 
 const HomePage = () => {
   return (
+    
     <div>
       {/* Navigation Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#f2f2f2' }}>
@@ -42,6 +44,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+      
     </div>
   );
 };

@@ -5,7 +5,7 @@ const Register = () => {
   return (
     <div className={styles.registerContainer}>
       <div className={styles.logo}>
-        {/* Your Logo */}
+        {/* Our Logo */}
       </div>
       <h1 className={styles.title}>Register</h1>
       <form>

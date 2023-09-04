@@ -5,7 +5,7 @@ const Login = () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logo}>
-        {/* Your Logo */}
+        {/* Our Logo */}
       </div>
       <h1 className={styles.title}>Login</h1>
       <form>

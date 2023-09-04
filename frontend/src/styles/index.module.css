@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0 auto;
+  }
+  
+  .header, .footer {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .nav, .authButtons, .footerLinks, .socialMedia {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+  }
+  
+  .about, .features {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }

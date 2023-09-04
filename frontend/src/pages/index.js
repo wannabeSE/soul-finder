@@ -1,52 +1,86 @@
-import React from 'react';
-import Header from '../components/Header';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import styles from '../styles/index.module.css';
 
-// Dummy data for posts
-const posts = [
-  { id: 1, content: 'This is the first post.' },
-  { id: 2, content: 'This is the second post.' },
-  { id: 3, content: 'This is the third post.' }
-];
+const LandingPage = () => {
 
-const HomePage = () => {
+  const router = useRouter();
+  const isLoggedIn = false; // Replace with your actual logic
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/homepage');
+    }
+  }, [isLoggedIn]);
+
+  const handleSignIn = () => {
+    router.push('/login');
+  };
+
+  const handleSignUp = () => {
+    router.push('/register');
+  };
+
   return (
-    
-    <div>
-      {/* Navigation Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#f2f2f2' }}>
-        <div>
-          <img src='/logo.png' alt='Logo' style={{ width: '50px' }} />
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div className={styles.logo}>Your Logo</div>
+        <nav className={styles.nav}>
+          <a href='#'>Home</a>
+          <a href='#'>About Us</a>
+          <a href='#'>How It Works</a>
+          <a href='#'>Contact Us</a>
+        </nav> 
+        
+        <div className={styles.authButtons}>
+          <button onClick={handleSignIn}>Sign In</button>
+          <button onClick={handleSignUp}>Sign Up</button>
         </div>
-        <div>
-          <h1>Find the Soul</h1>
+      </header>
+      <section className={styles.hero}>
+        <img src='your-banner-image.jpg' alt='Banner' />
+        <h1>Your Catchy Headline</h1>
+        <p>Your Subheadline</p>
+        <button>Get Started</button>
+      </section>
+      <section className={styles.about}>
+        <h2>About Us</h2>
+        <p>Your Brief Description</p>
+        <p>Your Mission Statement</p>
+      </section>
+      <section className={styles.features}>
+        <div className={styles.feature}>
+          <img src='ai-icon.png' alt='AI Matching' />
+          <h3>AI Matching</h3>
+          <p>Explain the AI-based image matching feature.</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <div>Feed Icon</div>
-          <div>Community Icon</div>
-          <div>Profile Icon</div>
+        <div className={styles.feature}>
+          <img src='community-icon.png' alt='Community Validation' />
+          <h3>Community Validation</h3>
+          <p>Describe community validation.</p>
         </div>
-      </div>
-
-      {/* News Feed */}
-      <div style={{ padding: '1rem' }}>
-        {/* Post Box */}
-        <div style={{ marginBottom: '1rem' }}>
-          <textarea placeholder='Whats on your mind' rows='4' cols='50'></textarea>
-          <button>Post</button>
+        <div className={styles.feature}>
+          <img src='safety-icon.png' alt='User Safety' />
+          <h3>User Safety</h3>
+          <p>Talk about secure communication and data privacy.</p>
         </div>
-
-        {/* Scrollable Posts */}
-        <div style={{ maxHeight: '400px', overflowY: 'scroll' }}>
-          {posts.map(post => (
-            <div key={post.id} style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ccc' }}>
-              {post.content}
-            </div>
-          ))}
+      </section>
+      <footer className={styles.footer}>
+        <div className={styles.footerLinks}>
+          <a href='#'>Privacy Policy</a>
+          <a href='#'>Terms of Service</a>
         </div>
-      </div>
-      
+        <div className={styles.socialMedia}>
+          <a href='#'>Facebook</a>
+          <a href='#'>Twitter</a>
+          <a href='#'>Instagram</a>
+        </div>
+        <div className={styles.contactInfo}>
+          <p>Contact Us: info@example.com</p>
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default HomePage;
+export default LandingPage;

@@ -3,6 +3,7 @@ package com.example.soulfinder.soulfinderbackend.Controller;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +24,13 @@ import io.weaviate.client.v1.schema.model.Schema;
 public class WeaviateController {
     
   
-    WeaviateClient client = WeaviateSchema.retConfig();
+    @Autowired
+    private VectorDBService vDbService;
+    
+    private WeaviateClient client = WeaviateSchema.retConfig();
     @GetMapping("/")
     public String dbActiveStatus(){
       
-        WeaviateClient client = WeaviateSchema.retConfig();
         System.out.println("🔥 Server is up and listening to port: 8081 🔥");
         Result <Schema> dbResult = client.schema().getter().run();
         if(dbResult.hasErrors()){
@@ -38,9 +41,9 @@ public class WeaviateController {
     
 
     @PostMapping(value="/file-upload")
-    public ResponseEntity<?> fileUploader(@RequestParam("image") MultipartFile file) throws IOException {
-        String response = VectorDBService.vectorDbImageUploader(file);
-        
+    public ResponseEntity<?> fileUploader(@RequestParam("image") MultipartFile file, @RequestParam("img2") MultipartFile file2) throws IOException {
+        //String response = VectorDBService.vectorDbImageUploader(file);
+        String response = vDbService.vectorDbImageUploader(file);
         if(response == "Ok"){
             return ResponseEntity.status(HttpStatus.OK)
         .body ("Uploaded Successfully");
@@ -53,7 +56,7 @@ public class WeaviateController {
 
     @GetMapping("/dbcheck")
     public ResponseEntity<?> dbCheck(){
-        Object response = VectorDBService.dbItemCounter();
+        Object response = vDbService.dbItemCounter();
         return ResponseEntity.status(HttpStatus.OK)
         .body(response);
     }
@@ -61,7 +64,7 @@ public class WeaviateController {
     @PostMapping("/search")
     public void imageSearch(@RequestParam("image") MultipartFile file){
         try {
-            VectorDBService.imageSearchVectorDB(file);
+            vDbService.imageSearchVectorDB(file);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

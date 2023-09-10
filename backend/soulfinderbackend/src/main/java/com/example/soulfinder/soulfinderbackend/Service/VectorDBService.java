@@ -26,8 +26,8 @@ import io.weaviate.client.v1.graphql.query.fields.Field;
 @Service
 public class VectorDBService {
     
-    
-    public static String fileEncoder(MultipartFile fl) throws IOException{
+    private WeaviateClient client = WeaviateSchema.retConfig();
+    public String fileEncoder(MultipartFile fl) throws IOException{
         
         byte [] fileContent = fl.getBytes();
 
@@ -36,8 +36,8 @@ public class VectorDBService {
         return encodedString;
     }
     
-    public static String vectorDbImageUploader(MultipartFile fl) throws IOException{
-        WeaviateClient client = WeaviateSchema.retConfig();
+    public String vectorDbImageUploader(MultipartFile fl) throws IOException{
+
         Map<String, Object> dataSchema = new HashMap<>();
         String encodedString = fileEncoder(fl);
         dataSchema.put("image", encodedString);
@@ -53,8 +53,8 @@ public class VectorDBService {
         return "Ok";
     }
 
-    public static Object dbItemCounter(){
-        WeaviateClient client = WeaviateSchema.retConfig();
+    public Object dbItemCounter(){
+
         Field meta = Field.builder()
             .name("meta")
             .fields(new Field[]{
@@ -71,8 +71,7 @@ public class VectorDBService {
     }
 
 
-    public static void imageSearchVectorDB(MultipartFile file){
-        WeaviateClient client = WeaviateSchema.retConfig();
+    public void imageSearchVectorDB(MultipartFile file){
         String encodedString = "";
         try {
             encodedString = fileEncoder(file);
@@ -116,7 +115,7 @@ public class VectorDBService {
             System.out.println(e.getLocalizedMessage());
         }
     }
-    public static void imageConverter(String encodedString, String img) throws IOException{
+    public void imageConverter(String encodedString, String img) throws IOException{
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
         FileUtils.writeByteArrayToFile(new File(img+".jpg"), decodedBytes);
     }

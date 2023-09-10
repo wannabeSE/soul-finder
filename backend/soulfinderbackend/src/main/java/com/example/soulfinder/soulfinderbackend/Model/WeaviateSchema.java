@@ -9,8 +9,11 @@ import io.weaviate.client.WeaviateClient;
 import io.weaviate.client.base.Result;
 import io.weaviate.client.v1.schema.model.WeaviateClass;
 
+
 public class WeaviateSchema {
 
+    private WeaviateClient client = WeaviateSchema.retConfig();
+    
     public static WeaviateClient retConfig(){
         Config config = new Config("http","localhost:8080");
         WeaviateClient client = new WeaviateClient(config);
@@ -42,8 +45,6 @@ public class WeaviateSchema {
         }})
         .build();
         
-        Config config = new Config("http","localhost:8080");
-        WeaviateClient client = new WeaviateClient(config);
 
         Result <Boolean> dbResult = client.schema().classCreator().withClass(clazz).run();
         if(dbResult.hasErrors()){

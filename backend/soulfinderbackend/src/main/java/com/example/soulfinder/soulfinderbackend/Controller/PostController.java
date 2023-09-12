@@ -11,7 +11,7 @@ import com.example.soulfinder.soulfinderbackend.Model.Post;
 import com.example.soulfinder.soulfinderbackend.Service.PostService;
 
 @RestController
-@RequestMapping("api/post/")
+@RequestMapping("api/posts/")
 public class PostController {
     
     @Autowired

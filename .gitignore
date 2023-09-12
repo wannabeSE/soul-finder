@@ -1,2 +1,3 @@
 .DS_Store
 backend/.vscode/settings.json
+backend/soulfinderbackend/src/main/resources/application.properties

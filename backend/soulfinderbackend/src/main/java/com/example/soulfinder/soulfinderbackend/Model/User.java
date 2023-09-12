@@ -9,13 +9,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@Document(collection = "Posts")
+@Document(collection = "Users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class User {
     
     @Id
-    private ObjectId postId;
-    private String body;
+    private ObjectId userId;
+    private String userName;
+    private String dpUrl;
+
 }

@@ -34,7 +34,7 @@ public class WeaviateController {
         System.out.println("🔥 Server is up and listening to port: 8081 🔥");
         Result <Schema> dbResult = client.schema().getter().run();
         if(dbResult.hasErrors()){
-            return "Error occured";
+            return "Error occurred";
         }
         return dbResult.getResult().toString();
     }

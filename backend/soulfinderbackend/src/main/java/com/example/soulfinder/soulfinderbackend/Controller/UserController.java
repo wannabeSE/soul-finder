@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(value="/get-all-users")
-    public ResponseEntity<Object> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK)
         .body(userService.getAllUsersService());
     }

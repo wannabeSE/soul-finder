@@ -19,7 +19,7 @@ public class UserService {
         return createdUser;
     }   
 
-    public Object getAllUsersService(){
+    public List<User> getAllUsersService(){
         List <User> userList = userRepo.findAll();
         return userList;
     }

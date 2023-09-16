@@ -1,5 +1,7 @@
 package com.example.soulfinder.soulfinderbackend.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +14,14 @@ public class PostService {
     @Autowired
     PostRepos postRepos;
 
-    public Object savePostService(Post postData){
-        Object res = postRepos.save(postData);
+    public Post savePostService(Post postData){
+        Post res = postRepos.save(postData);
         return res;
     }
 
-    public Object getAllPostService(){
-        Object response = postRepos.findAll();
-        return response;
+    public List<Post> getAllPostService(){
+        List<Post> posts = postRepos.findAll();
+        return posts;
 
     }
 }

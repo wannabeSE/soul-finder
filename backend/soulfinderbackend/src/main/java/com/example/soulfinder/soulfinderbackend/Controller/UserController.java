@@ -1,6 +1,11 @@
 package com.example.soulfinder.soulfinderbackend.Controller;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -25,9 +29,15 @@ public class UserController {
         return userService.userCreationService(user);
     }
 
-    @GetMapping(value="/get-users")
-    public Object getAllUsers() {
-        return userService.getAllUsersService();
+    @GetMapping(value="/get-all-users")
+    public ResponseEntity<Object> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(userService.getAllUsersService());
     }
-    
+
+    @GetMapping("/get-all-users/{userId}")
+    public ResponseEntity<Object> getUserById(@PathVariable("userId") ObjectId userId ){
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(userService.getUserByIdService(userId));
+    }
 }

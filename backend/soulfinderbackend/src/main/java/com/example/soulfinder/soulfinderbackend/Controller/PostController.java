@@ -19,7 +19,7 @@ public class PostController {
 
     @GetMapping("/")
     public String hello(){
-        return "server is up";
+        return "server is up 🔥";
     }
 
     @GetMapping("/get-posts")

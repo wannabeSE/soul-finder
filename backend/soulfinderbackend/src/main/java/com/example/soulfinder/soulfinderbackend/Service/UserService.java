@@ -1,5 +1,8 @@
 package com.example.soulfinder.soulfinderbackend.Service;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +14,17 @@ public class UserService {
     
     @Autowired
     private UserRepo userRepo;
-    public Object userCreationService(User user){
-        Object createdUser = userRepo.save(user);
+    public User userCreationService(User user){
+        User createdUser = userRepo.save(user);
         return createdUser;
     }   
 
     public Object getAllUsersService(){
-        return userRepo.findAll();
+        List <User> userList = userRepo.findAll();
+        return userList;
+    }
+
+    public Object getUserByIdService(ObjectId userObjectId){
+        return userRepo.findById(userObjectId);
     }
 }

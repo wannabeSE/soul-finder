@@ -1,6 +1,5 @@
 package com.example.soulfinder.soulfinderbackend.Model;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,4 +17,8 @@ public class Post {
     @Id
     private String postId;
     private String body;
+    
+    public Post(String body){
+        this.body = body;
+    }
 }

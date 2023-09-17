@@ -1,6 +1,5 @@
 package com.example.soulfinder.soulfinderbackend.Controller;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/get-all-users/{userId}")
-    public ResponseEntity<Object> getUserById(@PathVariable("userId") ObjectId userId ){
+    public ResponseEntity<Object> getUserById(@PathVariable String userId ){
         return ResponseEntity.status(HttpStatus.OK)
         .body(userService.getUserByIdService(userId));
     }

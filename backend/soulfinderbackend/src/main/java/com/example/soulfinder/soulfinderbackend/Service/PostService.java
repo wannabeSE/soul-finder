@@ -3,9 +3,13 @@ package com.example.soulfinder.soulfinderbackend.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
+import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.PostRepos;
 
 @Service
@@ -13,10 +17,16 @@ public class PostService {
     
     @Autowired
     PostRepos postRepos;
-
-    public Post savePostService(Post postData){
-        Post res = postRepos.save(postData);
-        return res;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+    public Post savePostService(String postData, String userId){
+        Post post = postRepos.insert(new Post(postData));
+        mongoTemplate.update(User.class)
+        .matching(Criteria.where("userId").is(userId))
+        .apply(new Update().push("postIds").value(postData))
+        .first();
+        
+        return post;
     }
 
     public List<Post> getAllPostService(){

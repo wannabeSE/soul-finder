@@ -7,43 +7,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.soulfinder.soulfinderbackend.Model.WeaviateSchema;
 import com.example.soulfinder.soulfinderbackend.Service.VectorDBService;
 
-import io.weaviate.client.WeaviateClient;
-import io.weaviate.client.base.Result;
-import io.weaviate.client.v1.schema.model.Schema;
+
 
 
 @RestController
+@RequestMapping("vectordb/")
 public class WeaviateController {
     
   
     @Autowired
     private VectorDBService vDbService;
     
-    private WeaviateClient client = WeaviateSchema.retConfig();
-    @GetMapping("/")
-    public String dbActiveStatus(){
+    @GetMapping("/dbstatus")
+    public void dbActiveStatus(){
       
         System.out.println("🔥 Server is up and listening to port: 8081 🔥");
-        Result <Schema> dbResult = client.schema().getter().run();
-        if(dbResult.hasErrors()){
-            return "Error occurred";
-        }
-        return dbResult.getResult().toString();
+        vDbService.dbClassStatus();
+        
     }
-    
+
+    @GetMapping("/createdb")
+    public void createDB(){
+        vDbService.schemaClassBuilder();
+    }
+
+    @GetMapping("/deletedb")
+    public void deleteVectorDb(){
+        vDbService.deletVectorDBClass("Test");
+    }
 
     @PostMapping(value="/file-upload")
-    public ResponseEntity<?> fileUploader(@RequestParam("image") MultipartFile file, @RequestParam("img2") MultipartFile file2) throws IOException {
-        //String response = VectorDBService.vectorDbImageUploader(file);
-        String response = vDbService.vectorDbImageUploader(file);
+    public ResponseEntity<?> fileUploader(@RequestParam("images") MultipartFile[] files) throws IOException {
+        String response = "";
+
+        for (MultipartFile file : files) {
+            response = vDbService.vectorDbImageUploader(file);
+        }
+        
         if(response == "Ok"){
             return ResponseEntity.status(HttpStatus.OK)
         .body ("Uploaded Successfully");
@@ -61,6 +70,16 @@ public class WeaviateController {
         .body(response);
     }
 
+    @PostMapping("/get-image-byid/{id}")
+    public void getImageById(@PathVariable String id){
+        vDbService.getImageByIdService(id);
+    }
+
+    @PostMapping("/delete-image-byid/{id}")
+    public void deleteImageById(@PathVariable String id){
+        vDbService.deleteImageByIdSeervice(id);
+    }
+
     @PostMapping("/search")
     public void imageSearch(@RequestParam("image") MultipartFile file){
         try {
@@ -68,7 +87,7 @@ public class WeaviateController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        //VectorDBService.imageSearchVectorDB(file);
+
     }
 
     

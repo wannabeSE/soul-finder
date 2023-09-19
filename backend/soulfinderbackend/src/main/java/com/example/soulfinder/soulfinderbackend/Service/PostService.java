@@ -1,6 +1,7 @@
 package com.example.soulfinder.soulfinderbackend.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -33,5 +34,10 @@ public class PostService {
         List<Post> posts = postRepos.findAll();
         return posts;
 
+    }
+
+    public Optional<Post> getPostByIdService(String postId){
+        Optional<Post> post = postRepos.findById(postId);
+        return post;
     }
 }

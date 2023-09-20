@@ -11,10 +11,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.soulfinder.soulfinderbackend.Model.VectorImage;
 import com.example.soulfinder.soulfinderbackend.Model.WeaviateSchema;
+import com.example.soulfinder.soulfinderbackend.Repository.VectorImageRepo;
 import com.google.gson.GsonBuilder;
 
 import io.weaviate.client.WeaviateClient;
@@ -29,6 +32,8 @@ import io.weaviate.client.v1.schema.model.WeaviateClass;
 @Service
 public class VectorDBService {
     
+    @Autowired
+    private VectorImageRepo vectorImageRepo;
     private WeaviateClient client = WeaviateSchema.retConfig();
     private String createdDBClassName = "Test";
 
@@ -64,16 +69,18 @@ public class VectorDBService {
         System.out.println("db created successfully");
     }
 
-    public void dbClassStatus(){
+    public String dbClassStatus(){
         Result <Schema> dbResult = client.schema().getter().run();
         if(dbResult.hasErrors()){
-            System.out.println("Error Occurred");
+            //System.out.println("Error Occurred");
+            return "Error Occurred";
         }
         String jsonRes = new GsonBuilder()
             .setPrettyPrinting()
             .create()
             .toJson(dbResult.getResult());
-        System.out.println(jsonRes);
+        // System.out.println(jsonRes);
+        return jsonRes;
     }
     public String fileEncoder(MultipartFile fl) throws IOException{
         
@@ -85,10 +92,14 @@ public class VectorDBService {
     }
     
     public String vectorDbImageUploader(MultipartFile fl) throws IOException{
+        
         String uniqueID = UUID.randomUUID().toString();
         System.out.println(uniqueID);
         Map<String, Object> dataSchema = new HashMap<>();
         String encodedString = fileEncoder(fl);
+        VectorImage vectorImage = new VectorImage(uniqueID, encodedString);
+        //System.out.println(vectorImage.getImgId());
+        setVectorImgToMongoService(vectorImage);
         dataSchema.put("image", encodedString);
         Result<WeaviateObject> result = client.data().creator()
         .withClassName(createdDBClassName)
@@ -103,6 +114,13 @@ public class VectorDBService {
         return "Ok";
     }
 
+    public void setVectorImgToMongoService(VectorImage vectorImage){
+        vectorImageRepo.save(vectorImage);
+    }
+    public List<VectorImage> getAllVectorImgFromMongoService(){
+        List<VectorImage> images = vectorImageRepo.findAll();
+        return images;
+    }
     public Object dbItemCounter(){
 
         Field meta = Field.builder()

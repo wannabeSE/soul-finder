@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,26 +22,29 @@ import com.example.soulfinder.soulfinderbackend.Service.VectorDBService;
 
 @RestController
 @RequestMapping("vectordb/")
-public class WeaviateController {
+public class VectorDbController {
     
   
     @Autowired
     private VectorDBService vDbService;
     
     @GetMapping("/dbstatus")
-    public void dbActiveStatus(){
+    public String dbActiveStatus(){
       
+        if(vDbService.dbClassStatus() == "Error Occurred"){
+            return "Error Occurred";
+        }
         System.out.println("🔥 Server is up and listening to port: 8081 🔥");
-        vDbService.dbClassStatus();
+        return vDbService.dbClassStatus();
         
     }
 
-    @GetMapping("/createdb")
+    @PostMapping("/createdb")
     public void createDB(){
         vDbService.schemaClassBuilder();
     }
 
-    @GetMapping("/deletedb")
+    @PostMapping("/deletedb")
     public void deleteVectorDb(){
         vDbService.deletVectorDBClass("Test");
     }
@@ -87,8 +91,12 @@ public class WeaviateController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
 
+    @GetMapping("/get-all-images")
+    public ResponseEntity<Object> getAllVectorImagesFromMongo(){
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(vDbService.getAllVectorImgFromMongoService());
+    }
     
 }

@@ -4,8 +4,8 @@ package com.example.soulfinder.soulfinderbackend.Controller;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,16 +37,19 @@ public class PostController {
 
     @PostMapping("/save-post")
     public ResponseEntity<?> postToDb(@RequestBody Map<String, String> payload){
+        System.out.println(payload);
         return ResponseEntity.status(HttpStatus.OK)
         .body(postService
         .savePostService(
+
             payload.get("postData"),
-            payload.get("userId")
+            payload.get("userId"),
+            payload.get("vecImgId")
             )
         );
     }
     @GetMapping("/get-posts/{postId}")
-    public ResponseEntity<?> getSinglePost(@PathVariable String postId){
+    public ResponseEntity<Object> getSinglePost(@PathVariable String postId){
         return ResponseEntity.status(HttpStatus.OK)
         .body(postService.getPostByIdService(postId));
     }

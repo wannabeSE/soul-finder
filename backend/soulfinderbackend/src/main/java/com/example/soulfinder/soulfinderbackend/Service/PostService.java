@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
 import com.example.soulfinder.soulfinderbackend.Model.User;
+
 import com.example.soulfinder.soulfinderbackend.Repository.PostRepos;
 
 @Service
@@ -20,13 +21,18 @@ public class PostService {
     PostRepos postRepos;
     @Autowired
     private MongoTemplate mongoTemplate;
-    public Post savePostService(String postData, String userId){
+    public Post savePostService(String postData, String userId , String vecImgId){
+
         Post post = postRepos.insert(new Post(postData));
         mongoTemplate.update(User.class)
         .matching(Criteria.where("userId").is(userId))
         .apply(new Update().push("postIds").value(postData))
         .first();
-        
+        String postId = post.getPostId();
+        mongoTemplate.update(Post.class)
+        .matching(Criteria.where("postId").is(postId))
+        .apply(new Update().push("vectorImgIds").value(vecImgId))
+        .first();
         return post;
     }
 

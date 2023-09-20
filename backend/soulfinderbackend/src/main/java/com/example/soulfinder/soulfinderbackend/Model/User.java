@@ -15,12 +15,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+
+public class User{
     
     @Id
     private String userId;
-    private String userName;
+    private String email;
+    private String password;
+    private String name;
     private String dpUrl;
     @DocumentReference
     private List<Post> postIds;
+
 }

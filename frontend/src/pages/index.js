@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import styles from '../styles/index.module.css';
+import Header from '../components/Header';
 
 const LandingPage = () => {
 
@@ -23,7 +24,8 @@ const LandingPage = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
+      <Header/>
+      {/* <header className={styles.header}>
         <div className={styles.logo}>Your Logo</div>
         <nav className={styles.nav}>
           <a href='#'>Home</a>
@@ -36,7 +38,7 @@ const LandingPage = () => {
           <button onClick={handleSignIn}>Sign In</button>
           <button onClick={handleSignUp}>Sign Up</button>
         </div>
-      </header>
+      </header> */}
       <section className={styles.hero}>
         <img src='your-banner-image.jpg' alt='Banner' />
         <h1>Your Catchy Headline</h1>

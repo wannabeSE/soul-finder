@@ -1,43 +1,74 @@
-.headerContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-  }
-  
-  .logoContainer {
-    flex: 1;
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-  }
-  
-  .navContainer {
-    flex: 2;
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .navLink {
-    color: white;
-    text-decoration: none;
-    padding: 5px 10px;
-  }
-  
-  .authContainer {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .authLink {
-    color: white;
-    text-decoration: none;
-    padding: 5px 10px;
-  }
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Montserrat', sans-serif;
+  align-items: center;
+  padding: 10px 20px;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  color: #1f2cba;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menuItem {
+  margin: 0 15px;
+  cursor: pointer;
+}
+
+.notificationBell {
+  margin-left: 5px;
+}
+
+.profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  color: #43455B;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #43455B;
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdown a:last-child {
+  border-bottom: none;
+}
+
+.dropdown a:hover {
+  background-color: #f5f5f5;
+}

@@ -5,6 +5,7 @@
     justify-content: center;
     min-height: 100vh;
     margin: 0 auto;
+    font-family: 'Montserrat', sans-serif;
   }
   
   .header, .footer {

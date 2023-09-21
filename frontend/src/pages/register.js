@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/register.module.css";
-
+import { useAuth } from '../../authHook';
 const Register = () => {
   return (
     <div className={styles.registerContainer}>

@@ -47,7 +47,7 @@ public class VectorDbController {
 
     @PostMapping("/deletedb")
     public void deleteVectorDb(){
-        vDbService.deletVectorDBClass("Test");
+        vDbService.deleteVectorDBClass("Test");
     }
 
     @PostMapping(value="/file-upload")
@@ -82,7 +82,7 @@ public class VectorDbController {
 
     @PostMapping("/delete-image-byid/{id}")
     public void deleteImageById(@PathVariable String id){
-        vDbService.deleteImageByIdSeervice(id);
+        vDbService.deleteImageByIdService(id);
     }
 
     @PostMapping("/search")

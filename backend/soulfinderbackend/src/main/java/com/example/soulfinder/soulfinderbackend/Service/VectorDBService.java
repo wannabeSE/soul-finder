@@ -63,7 +63,7 @@ public class VectorDBService {
 
         Result <Boolean> dbResult = client.schema().classCreator().withClass(clazz).run();
         if(dbResult.hasErrors()){
-            System.out.println("error occured");
+            System.out.println("error occurred");
             return;
         }
         System.out.println("db created successfully");
@@ -185,13 +185,13 @@ public class VectorDBService {
             System.out.println(e.getLocalizedMessage());
         }
     }
-    public void deletVectorDBClass(String className){
+    public void deleteVectorDBClass(String className){
         Result<?> res= client.schema().classDeleter().withClassName(className).run();
         if(res.hasErrors()){
             System.out.println("Delete Unsuccessful");
             return;
         }
-        System.out.println("Deletation Successful");
+        System.out.println("Deletion Successful");
     }
 
     public void getImageByIdService(String id){
@@ -203,17 +203,17 @@ public class VectorDBService {
         fileWriter(result.getResult().toString());
     }
 
-    public void deleteImageByIdSeervice(String idToDelete){
+    public void deleteImageByIdService(String idToDelete){
 
         Result<?> res = client.data().deleter()
             .withClassName(createdDBClassName)
             .withID(idToDelete)
             .run();
         if(res.hasErrors()){
-            System.out.println("Image Deletation failed");
+            System.out.println("Image Deletion failed");
             return;
         }
-        System.out.println("Deletation successful");
+        System.out.println("Deletion successful");
     }
     public void fileWriter(String content){
         try {

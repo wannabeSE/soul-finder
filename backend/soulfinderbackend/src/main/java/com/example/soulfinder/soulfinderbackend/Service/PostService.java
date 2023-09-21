@@ -25,11 +25,14 @@ public class PostService {
     public Post savePostService(PostObject postObject){
 
         Post post = postRepos.insert(new Post(postObject.getPostData()));
+        String postId = post.getPostId();
         mongoTemplate.update(User.class)
         .matching(Criteria.where("userId").is(postObject.getUserId()))
-        .apply(new Update().push("postIds").value(postObject.getPostData()))
+        .apply(new Update().push("postIds").value(postId))
         .first();
-        String postId = post.getPostId();
+        
+        
+
         mongoTemplate.update(Post.class)
         .matching(Criteria.where("postId").is(postId))
         .apply(new Update().push("vectorImgIds").value(postObject.getVecImgIds()))

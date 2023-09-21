@@ -72,14 +72,14 @@ public class VectorDBService {
     public String dbClassStatus(){
         Result <Schema> dbResult = client.schema().getter().run();
         if(dbResult.hasErrors()){
-            //System.out.println("Error Occurred");
+
             return "Error Occurred";
         }
         String jsonRes = new GsonBuilder()
             .setPrettyPrinting()
             .create()
             .toJson(dbResult.getResult());
-        // System.out.println(jsonRes);
+
         return jsonRes;
     }
     public String fileEncoder(MultipartFile fl) throws IOException{
@@ -98,7 +98,7 @@ public class VectorDBService {
         Map<String, Object> dataSchema = new HashMap<>();
         String encodedString = fileEncoder(fl);
         VectorImage vectorImage = new VectorImage(uniqueID, encodedString);
-        //System.out.println(vectorImage.getImgId());
+
         setVectorImgToMongoService(vectorImage);
         dataSchema.put("image", encodedString);
         Result<WeaviateObject> result = client.data().creator()
@@ -220,6 +220,7 @@ public class VectorDBService {
             FileWriter fileWriter = new FileWriter("/Users/jsamir/Development/soul-finder/backend/res.txt");
             fileWriter.write(content);
             fileWriter.close();
+
         } catch (Exception e) {
             System.err.println(e.getLocalizedMessage());
         }

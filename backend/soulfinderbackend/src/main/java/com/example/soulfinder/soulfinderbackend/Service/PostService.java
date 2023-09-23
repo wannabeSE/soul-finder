@@ -24,19 +24,23 @@ public class PostService {
     
     public Post savePostService(PostObject postObject){
 
-        Post post = postRepos.insert(new Post(postObject.getPostData()));
+        var postObj= Post.builder()
+            .body(postObject.getPostData())
+            .vectorImgIds(postObject.getVecImgIds())
+            .build();
+
+        Post post = postRepos.insert(postObj);
         String postId = post.getPostId();
+        
         mongoTemplate.update(User.class)
         .matching(Criteria.where("userId").is(postObject.getUserId()))
         .apply(new Update().push("postIds").value(postId))
         .first();
         
-        
-
-        mongoTemplate.update(Post.class)
-        .matching(Criteria.where("postId").is(postId))
-        .apply(new Update().push("vectorImgIds").value(postObject.getVecImgIds()))
-        .first();
+        // mongoTemplate.update(Post.class)
+        // .matching(Criteria.where("postId").is(postId))
+        // .apply(new Update().push("vectorImgIds").value(postObject.getVecImgIds()))
+        // .first();
         return post;
     }
 

@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,15 +16,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Post {
     
     @Id
     private String postId;
     private String body;
-    @DocumentReference
-    private List<VectorImage> vectorImgIds;
+    private List<String> vectorImgIds;
     
-    public Post(String body){
-        this.body = body;
-    }
+    
 }

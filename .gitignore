@@ -2,3 +2,7 @@
 backend/.vscode/settings.json
 backend/soulfinderbackend/src/main/resources/application.properties
 backend/res.txt
+.DS_Store
+.DS_Store
+backend/soulfinderbackend/src/main/java/com/example/soulfinder/soulfinderbackend/Config/ProjectConfig.java
+backend/.DS_Store

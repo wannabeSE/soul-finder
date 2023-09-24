@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
-import com.example.soulfinder.soulfinderbackend.Model.PostObject;
+import com.example.soulfinder.soulfinderbackend.Model.PostObjectWrapper;
 
 import com.example.soulfinder.soulfinderbackend.Service.PostService;
 
@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @PostMapping("/save-post")
-    public ResponseEntity<?> postToDb(@RequestBody PostObject postObject){
+    public ResponseEntity<?> postToDb(@RequestBody PostObjectWrapper postObject){
         return ResponseEntity.status(HttpStatus.OK)
         .body(postService
         .savePostService(

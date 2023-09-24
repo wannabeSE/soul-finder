@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
-import com.example.soulfinder.soulfinderbackend.Model.PostObject;
+import com.example.soulfinder.soulfinderbackend.Model.PostObjectWrapper;
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.PostRepos;
 
@@ -22,9 +22,9 @@ public class PostService {
     @Autowired
     private MongoTemplate mongoTemplate;
     
-    public Post savePostService(PostObject postObject){
+    public Post savePostService(PostObjectWrapper postObject){
 
-        var postObj= Post.builder()
+        Post postObj= Post.builder()
             .body(postObject.getPostData())
             .vectorImgIds(postObject.getVecImgIds())
             .build();
@@ -37,10 +37,6 @@ public class PostService {
         .apply(new Update().push("postIds").value(postId))
         .first();
         
-        // mongoTemplate.update(Post.class)
-        // .matching(Criteria.where("postId").is(postId))
-        // .apply(new Update().push("vectorImgIds").value(postObject.getVecImgIds()))
-        // .first();
         return post;
     }
 

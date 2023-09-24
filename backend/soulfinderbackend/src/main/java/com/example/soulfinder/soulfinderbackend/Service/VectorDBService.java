@@ -36,7 +36,8 @@ public class VectorDBService {
     private VectorImageRepo vectorImageRepo;
     private WeaviateClient client = WeaviateSchema.retConfig();
     private String createdDBClassName = "Test";
-
+    @Autowired
+    private CloudinaryImageUploadService cloudinaryImageUploadService;
     public void schemaClassBuilder(){
         
         Map<String, Object> img2vec = new HashMap<>();
@@ -97,9 +98,19 @@ public class VectorDBService {
         System.out.println(uniqueID);
         Map<String, Object> dataSchema = new HashMap<>();
         String encodedString = fileEncoder(fl);
-        VectorImage vectorImage = new VectorImage(uniqueID, encodedString);
 
+        //Uploads to Cloudinary storage bucket and gets the link
+        String imgUrl = cloudinaryImageUploadService.upload(fl);    
+
+        VectorImage vectorImage = VectorImage.builder()
+            .vectorDbId(uniqueID)
+            .imgUrl(imgUrl)
+            .build();
+
+        //uploading image to metadata to MongoDB
         setVectorImgToMongoService(vectorImage);
+
+        //Uploading Image to vectordb
         dataSchema.put("image", encodedString);
         Result<WeaviateObject> result = client.data().creator()
         .withClassName(createdDBClassName)

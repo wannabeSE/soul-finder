@@ -1,4 +1,4 @@
-import Styles from 'util';'../styles/globals.css';
+import '../styles/global.css';
 import Header from '../components/Header'; 
 import { AuthProvider } from '../../authHook';
 import initFirebase from '../../initFirebase';
@@ -10,11 +10,9 @@ function MyApp({ Component, pageProps }) {
   console.log(app);
 
   return (
-    <>
-      
+  
       <Component {...pageProps} />
-      
-    </>
+    
   );
 }
 

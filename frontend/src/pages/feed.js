@@ -21,8 +21,8 @@ const Feed = () => {
         <Header />
         <div className={styles.insideNav}>
             <div className={styles.actionBar}>
-            <button className={styles.lostButton} onClick={() => setShowLost(true)}>Lost</button>
-            <button className={styles.foundButton} onClick={() => setShowLost(false)}>Found</button>
+            <button className={showLost ? styles.activeButton : styles.lostButton} onClick={() => setShowLost(true)}>Lost</button>
+            <button className={!showLost ? styles.activeButton : styles.foundButton} onClick={() => setShowLost(false)}>Found</button>
             </div>
         </div>
         <div className = {styles.createButtonDiv}>

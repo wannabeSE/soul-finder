@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect } from 'react';
 import styles from '../styles/Header.module.css';  // Make sure the path is correct
 import Proimage from '../Assets/profile-pic.png'
+import { useRouter } from 'next/router';
 
 const Header = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const router = useRouter();
+  const [activePage, setActivePage] = useState('');  // Track the active page
+
+  useEffect(() => {
+    // You can add more paths as needed
+    if (router.pathname === '/feed') {
+      setActivePage('feed');
+    } else if (router.pathname === '/match') {
+      setActivePage('match');
+    } else if (router.pathname === '/contribute') {
+      setActivePage('contribute');
+    } else {
+      setActivePage('');
+    }
+  }, [router.pathname]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -11,16 +27,16 @@ const Header = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo } onClick={() => window.location.href = '/'}>Logo</div>
+      <div className={styles.logo} onClick={() => { window.location.href = '/'; setActivePage('home'); }}>Logo</div>
       <div className={styles.menu}>
-        <div className={styles.menuItem} onClick={() => window.location.href = '/feed'}>Feed</div>
-        <div className={styles.menuItem} onClick={() => window.location.href = '/match'}>
+        <div className={activePage === 'feed' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/feed'; setActivePage('feed'); }}>Feed</div>
+        <div className={activePage === 'match' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/match'; setActivePage('match'); }}>
           Match
           <span className={styles.notificationBell}>🔔</span>
         </div>
-        <div className={styles.menuItem} onClick={() => window.location.href = '/contribute'}>Contribute</div>
+        <div className={activePage === 'contribute' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/contribute'; setActivePage('contribute'); }}>Contribute</div>
         <div className={styles.profile}>
-          <img src= {Proimage}   alt='Pro' className={styles.profileImage} onClick={toggleDropdown} />
+          <img src={Proimage} alt='Pro' className={styles.profileImage} onClick={toggleDropdown} />
           {dropdownVisible && (
             <div className={styles.dropdown}>
               <a href='/profile'>Profile</a>

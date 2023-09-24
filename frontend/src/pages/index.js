@@ -43,7 +43,7 @@ const LandingPage = () => {
         <img src='your-banner-image.jpg' alt='Banner' />
         <h1>Your Catchy Headline</h1>
         <p>Your Subheadline</p>
-        <button onClick={handleSignUp}>Get Started</button>
+        <button onClick={handleSignUp} className={styles.getStartedButton}>Get Started</button>
       </section>
       <section className={styles.about}>
         <h2>About Us</h2>

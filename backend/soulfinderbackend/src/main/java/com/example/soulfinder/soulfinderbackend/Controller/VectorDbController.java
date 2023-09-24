@@ -22,7 +22,7 @@ import com.example.soulfinder.soulfinderbackend.Service.VectorDBService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("vectordb/")
+@RequestMapping("/vectordb")
 public class VectorDbController {
     
   

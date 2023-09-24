@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PostObject {
+public class PostObjectWrapper {
    
     @JsonProperty("postData")
     public String postData;

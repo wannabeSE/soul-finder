@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
@@ -26,16 +27,18 @@ public class PostService {
 
         Post postObj= Post.builder()
             .body(postObject.getPostData())
+            .userId(postObject.getUserId())
             .vectorImgIds(postObject.getVecImgIds())
             .build();
 
         Post post = postRepos.insert(postObj);
         String postId = post.getPostId();
         
-        mongoTemplate.update(User.class)
-        .matching(Criteria.where("userId").is(postObject.getUserId()))
-        .apply(new Update().push("postIds").value(postId))
-        .first();
+        mongoTemplate
+            .update(User.class)
+            .matching(Criteria.where("userId").is(postObject.getUserId()))
+            .apply(new Update().push("postIds").value(postId))
+            .first();
         
         return post;
     }
@@ -49,5 +52,12 @@ public class PostService {
     public Optional<Post> getPostByIdService(String postId){
         Optional<Post> post = postRepos.findById(postId);
         return post;
+    }
+
+    public List<Post> getPostByUserIdService(String userId){
+        return mongoTemplate
+            .find(new Query()
+            .addCriteria(Criteria.where("userId").is(userId)),
+             Post.class);
     }
 }

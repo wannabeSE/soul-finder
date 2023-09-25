@@ -22,7 +22,7 @@ import com.example.soulfinder.soulfinderbackend.Service.PostService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("api/posts/")
+@RequestMapping("api/post/")
 public class PostController {
     
     @Autowired
@@ -33,7 +33,7 @@ public class PostController {
         return "server is up 🔥";
     }
 
-    @GetMapping("/get-posts")
+    @GetMapping("/get-all-posts")
     public List<Post> getPost(){
         List<Post> posts = postService.getAllPostService();
         return posts;
@@ -52,5 +52,11 @@ public class PostController {
     public ResponseEntity<Object> getSinglePost(@PathVariable String postId){
         return ResponseEntity.status(HttpStatus.OK)
         .body(postService.getPostByIdService(postId));
+    }
+
+    @GetMapping("/get-user-posts/{userId}")
+    public ResponseEntity<List<Post>> getPostByUserId(@PathVariable String userId){
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(postService.getPostByUserIdService(userId));
     }
 }

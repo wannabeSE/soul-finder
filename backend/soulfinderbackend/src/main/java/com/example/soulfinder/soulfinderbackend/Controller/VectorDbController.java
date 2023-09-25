@@ -94,10 +94,6 @@ public class VectorDbController {
         }
     }
 
-    @GetMapping("/get-all-images")
-    public ResponseEntity<Object> getAllVectorImagesFromMongo(){
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(vDbService.getAllVectorImgFromMongoService());
-    }
+    
     
 }

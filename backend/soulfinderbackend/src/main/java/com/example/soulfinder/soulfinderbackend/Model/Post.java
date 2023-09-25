@@ -22,6 +22,7 @@ public class Post {
     @Id
     private String postId;
     private String body;
+    private String userId;
     private List<String> vectorImgIds;
     
     

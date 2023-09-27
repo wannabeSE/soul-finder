@@ -16,7 +16,11 @@ const Header = () => {
       setActivePage('match');
     } else if (router.pathname === '/contribute') {
       setActivePage('contribute');
-    } else {
+    } 
+    else if (router.pathname === '/chat'){
+      setActivePage('chat');
+    }
+    else {
       setActivePage('');
     }
   }, [router.pathname]);
@@ -35,6 +39,9 @@ const Header = () => {
           <span className={styles.notificationBell}>🔔</span>
         </div>
         <div className={activePage === 'contribute' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/contribute'; setActivePage('contribute'); }}>Contribute</div>
+        <div className={activePage === 'chat' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/chat'; setActivePage('chat'); }}>
+        <img src='../Assets\chat-round-line-svgrepo-com.svg'></img>
+        </div>
         <div className={styles.profile}>
           <img src={Proimage} alt='Pro' className={styles.profileImage} onClick={toggleDropdown} />
           {dropdownVisible && (

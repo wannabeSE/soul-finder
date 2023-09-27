@@ -1,32 +1,43 @@
 .navbar {
-  display: flex;
+  display:flex;
   justify-content: space-between;
   font-family: 'Work Sans', sans-serif;
   align-items: center;
   padding: 10px 20px;
   width: 100%;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 12px rgba(90, 47, 107, 0.1);
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
+  margin-left: 0%;
 }
 
 .menu {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 100px;
 }
 
 .menuItem {
   margin: 0 15px;
   padding: 10px 20px 10px 20px;
-  background-color: rgb(65, 67, 69);
+  background-color: #43455B;
   color: #fff;
+  font-size:medium;
   border-radius: 30px;
   cursor: pointer;
+}
+.menuItem:hover{
+  background-color:#fff ;
+  color: var(--text-col) ;
+  /* .activeMenuItem{
+    background-color: #43455B;
+    color: #fff; 
+  } */
 }
 
 .notificationBell {

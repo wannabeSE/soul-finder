@@ -1,12 +1,14 @@
 import React from "react";
 import styles from "../styles/register.module.css";
 import { useAuth } from '../../authHook';
+import Header from "../components/Header";
 const Register = () => {
   return (
     <div className={styles.registerContainer}>
+      <Header/>
       <div className={styles.card}>
         <div className={styles.logo}>{/* Our Logo */}</div>
-        <h1 className={styles.title}>Register</h1>
+        <h1 className={styles.title}>Create a new account</h1>
         <form>
           <div className={styles.inputGroup}>
             <label htmlFor="username" className={styles.label}>
@@ -45,7 +47,7 @@ const Register = () => {
             />
           </div>
           <button type="submit" className={styles.registerButton}>
-            Register
+            Sign up
           </button>
         </form>
         <a href="#" className={styles.login}>

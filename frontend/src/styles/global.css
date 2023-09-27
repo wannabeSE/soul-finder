@@ -1,19 +1,24 @@
+:root {
+  --theme-col: #b4a5c9;
+  --text-col: #06142E;
+}
+
+
 body {
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
-    font-family: 'Work Sans', sans-serif; /* Optional: Set a default font */
+    background-color: var(--theme-col); 
+    color: var(--text-col); 
+    font-family: 'Work Sans', sans-serif; 
   }
   
   a {
-    color: #fff; /* White text */
-    text-decoration: none; /* Removes underline */
+    color: #06142E; 
+    text-decoration: none; 
   }
   
   a:hover {
-    text-decoration: underline; /* Adds underline on hover for better UX */
+    text-decoration: underline; 
   }
   
-  /* Removes default margin and padding */
   *, *::before, *::after {
     margin: 0;
     padding: 0;

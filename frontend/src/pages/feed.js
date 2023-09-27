@@ -42,16 +42,16 @@ const Feed = () => {
         {showDialog && (
           <div className={styles.dialog}>
             <div className={styles.dialogitems}>
-                <h2 >Create Post</h2>
+                <h2 className={styles.createPost} >Create Post</h2>
                 <div className={styles.imageUpload}>
                 <label htmlFor='fileInput' className={styles.imageUpload}>
                     {image ? <img src={image} alt='Uploaded preview' />  : <span >📷</span> }
                 </label>
                 <input  id='fileInput' type='file' accept='image/*' onChange={handleImageChange} style={{ display: 'none' }} />
                 </div>
-                <div className={styles.postbuttons}>
-                    <button onClick={() => { /* Handle Post Action Here */ }}>Post</button>
-                    <button onClick={() => setShowDialog(false)}>Close</button>
+                <div className={styles.buttons}>
+                    <button className = {styles.postButton} onClick={() => { /* Handle Post Action Here */ }}>Post</button>
+                    <button className = {styles.closeButton} onClick={() => setShowDialog(false)}>Close</button>
                 </div>
             </div>
           </div>

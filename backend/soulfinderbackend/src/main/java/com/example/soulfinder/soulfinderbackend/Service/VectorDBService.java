@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.soulfinder.soulfinderbackend.Model.VectorImage;
 import com.example.soulfinder.soulfinderbackend.Model.WeaviateSchema;
 import com.example.soulfinder.soulfinderbackend.Repository.VectorImageRepo;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 
 import io.weaviate.client.WeaviateClient;
@@ -26,9 +27,7 @@ import io.weaviate.client.base.Result;
 import io.weaviate.client.v1.data.model.WeaviateObject;
 import io.weaviate.client.v1.graphql.model.GraphQLResponse;
 import io.weaviate.client.v1.graphql.query.argument.NearImageArgument;
-import io.weaviate.client.v1.graphql.query.argument.NearObjectArgument;
 import io.weaviate.client.v1.graphql.query.fields.Field;
-
 import io.weaviate.client.v1.schema.model.Property;
 import io.weaviate.client.v1.schema.model.Schema;
 import io.weaviate.client.v1.schema.model.WeaviateClass;
@@ -42,6 +41,7 @@ public class VectorDBService {
     private String createdDBClassName = "Test";
     @Autowired
     private CloudinaryImageUploadService cloudinaryImageUploadService;
+    private int vectorDbReturnResponseLimit = 3;
     public String schemaClassBuilder(){
         
         Map<String, Object> img2vec = new HashMap<>();
@@ -102,7 +102,7 @@ public class VectorDBService {
         Map<String, Object> dataSchema = new HashMap<>();
         String encodedString = fileEncoder(fl);
 
-        //Uploads to Cloudinary storage bucket and gets the link
+        //* Uploads to Cloudinary storage bucket and gets the link
         String imgUrl = cloudinaryImageUploadService.upload(fl);    
 
         VectorImage vectorImage = VectorImage.builder()
@@ -110,10 +110,10 @@ public class VectorDBService {
             .imgUrl(imgUrl)
             .build();
 
-        //uploading image to metadata to MongoDB
+        //* Uploading image to metadata to MongoDB
         setVectorImgToMongoService(vectorImage);
 
-        //Uploading Image to vectordb
+        //* Uploading Image to vector-db
         dataSchema.put("image", encodedString);
         Result<WeaviateObject> result = client.data().creator()
         .withClassName(createdDBClassName)
@@ -166,7 +166,7 @@ public class VectorDBService {
         //.distance(new Float(0.13453))
         .build();
         Field image = Field.builder().name("image").build();
-        Field _addtional = Field.builder()
+        Field _additional = Field.builder()
         .name("_additional")
         .fields(new Field[]{ 
           Field.builder().name("distance").build(),
@@ -175,47 +175,29 @@ public class VectorDBService {
         }).build();
         Result<GraphQLResponse> result = client.graphQL().get()
             .withClassName(createdDBClassName)
-            .withFields(image, _addtional)
+            .withFields(image, _additional)
             .withNearImage(test)
-            .withLimit(2)
+            .withLimit(vectorDbReturnResponseLimit)
             .run();
         
         if (result.hasErrors()) {
             System.out.println(result.getError());
             return;
         }
-        fileWriter(result.getResult().toString());
-        var responseImage = ((Map)((ArrayList)((Map)((Map)result
-            .getResult()
-            .getData())
-            .get("Get"))
-            .get("Test"))
-            .get(0))
-            .get("image");
+        String jsonRes = new GsonBuilder()
+            .setPrettyPrinting()
+            .create()
+            .toJson(result.getResult().getData());
+
+        fileWriter(jsonRes); //* to check json response */
+
+        System.out.println(idRetriever(jsonRes, 0));
+        System.out.println(idRetriever(jsonRes, 0));
+
+
+        imageRetriever(jsonRes, 0, "res_1");
+        imageRetriever(jsonRes, 1, "res_2");
         
-        var responseImage2 = ((Map)((ArrayList)((Map)((Map)result
-            .getResult()
-            .getData())
-            .get("Get"))
-            .get("Test"))
-            .get(1))
-            .get("image");
-
-        // var responseImage3 = ((Map)((ArrayList)((Map)((Map)result
-        //     .getResult()
-        //     .getData())
-        //     .get("Get"))
-        //     .get("Test"))
-        //     .get(2))
-        //     .get("image");
-
-        try {
-            imageConverter(responseImage.toString(), "result_1");
-            imageConverter(responseImage2.toString(), "result_2");
-            //imageConverter(responseImage3.toString(), "result_3");
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-        }
     }
     public void deleteVectorDBClass(String className){
         Result<?> res= client.schema().classDeleter().withClassName(className).run();
@@ -249,7 +231,7 @@ public class VectorDBService {
     }
     public void fileWriter(String content){
         try {
-            FileWriter fileWriter = new FileWriter("/Users/jsamir/Development/soul-finder/backend/res.txt");
+            FileWriter fileWriter = new FileWriter("res.txt");
             fileWriter.write(content);
             fileWriter.close();
 
@@ -257,6 +239,39 @@ public class VectorDBService {
             System.err.println(e.getLocalizedMessage());
         }
     }
+    public String idRetriever(String objectToDecode, int index){ // TODO: Might need to refactor this method
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode root = mapper.readTree(objectToDecode);
+            JsonNode id = root
+                .path("Get")
+                .path("Test")
+                .get(index)
+                .path("_additional")
+                .path("id");
+            String response = id.asText();
+            return response;  
+        } catch (Exception e) {
+            return e.getLocalizedMessage();
+        }
+    }
+    public String imageRetriever(String objectToDecode, int index, String imgName){ // TODO: Might need to refactor this method
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = mapper.readTree(objectToDecode);
+            JsonNode image = rootNode
+                .path("Get")
+                .path("Test")
+                .get(index)
+                .path("image");
+            String imageString = image.asText();
+            imageConverter(imageString, imgName);
+            return imageString;
+        } catch (Exception e) {
+            return e.getLocalizedMessage();
+        }
+    }
+
     public void imageConverter(String encodedString, String img) throws IOException{
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
         FileUtils.writeByteArrayToFile(new File(img+".jpg"), decodedBytes);

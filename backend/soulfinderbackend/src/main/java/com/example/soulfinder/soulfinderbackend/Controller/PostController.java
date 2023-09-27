@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
-import com.example.soulfinder.soulfinderbackend.Model.PostObjectWrapper;
-
 import com.example.soulfinder.soulfinderbackend.Service.PostService;
+import com.example.soulfinder.soulfinderbackend.Wrapper.PostObjectWrapper;
 
 @CrossOrigin
 @RestController

@@ -11,9 +11,9 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
-import com.example.soulfinder.soulfinderbackend.Model.PostObjectWrapper;
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.PostRepos;
+import com.example.soulfinder.soulfinderbackend.Wrapper.PostObjectWrapper;
 
 @Service
 public class PostService {

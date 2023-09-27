@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.UserRepo;
 
@@ -20,6 +19,7 @@ public class UserService {
     private UserRepo userRepo;
     @Autowired
     private MongoTemplate mongoTemplate;
+
     public User userCreationService(User user){
         User createdUser = userRepo.save(user);
         return createdUser;

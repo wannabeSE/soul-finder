@@ -1,4 +1,4 @@
-package com.example.soulfinder.soulfinderbackend.Model;
+package com.example.soulfinder.soulfinderbackend.Wrapper;
 
 import java.util.List;
 

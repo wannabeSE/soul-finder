@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,10 @@ import io.weaviate.client.base.Result;
 import io.weaviate.client.v1.data.model.WeaviateObject;
 import io.weaviate.client.v1.graphql.model.GraphQLResponse;
 import io.weaviate.client.v1.graphql.query.argument.NearImageArgument;
+import io.weaviate.client.v1.graphql.query.argument.NearObjectArgument;
 import io.weaviate.client.v1.graphql.query.fields.Field;
+
+import io.weaviate.client.v1.schema.model.Property;
 import io.weaviate.client.v1.schema.model.Schema;
 import io.weaviate.client.v1.schema.model.WeaviateClass;
 
@@ -38,7 +42,7 @@ public class VectorDBService {
     private String createdDBClassName = "Test";
     @Autowired
     private CloudinaryImageUploadService cloudinaryImageUploadService;
-    public void schemaClassBuilder(){
+    public String schemaClassBuilder(){
         
         Map<String, Object> img2vec = new HashMap<>();
         HashMap <String, Object> img2vecNeural = new HashMap<>();
@@ -52,7 +56,7 @@ public class VectorDBService {
         .vectorIndexType("hnsw")
         .moduleConfig(img2vec)
         .properties(new ArrayList<>(){{
-            add(io.weaviate.client.v1.schema.model.Property.builder()
+            add(Property.builder()
             .dataType(new ArrayList<>(){{
                 add("blob");
             }})
@@ -64,10 +68,9 @@ public class VectorDBService {
 
         Result <Boolean> dbResult = client.schema().classCreator().withClass(clazz).run();
         if(dbResult.hasErrors()){
-            System.out.println("error occurred");
-            return;
+            return "failed to create db schema";
         }
-        System.out.println("db created successfully");
+        return "db created successfully";
     }
 
     public String dbClassStatus(){
@@ -160,11 +163,19 @@ public class VectorDBService {
         
         NearImageArgument test = client.graphQL().arguments().nearImageArgBuilder()
         .image(encodedString)
+        //.distance(new Float(0.13453))
         .build();
         Field image = Field.builder().name("image").build();
+        Field _addtional = Field.builder()
+        .name("_additional")
+        .fields(new Field[]{ 
+          Field.builder().name("distance").build(),
+          Field.builder().name("certainty").build(),
+          Field.builder().name("id").build() 
+        }).build();
         Result<GraphQLResponse> result = client.graphQL().get()
             .withClassName(createdDBClassName)
-            .withFields(image)
+            .withFields(image, _addtional)
             .withNearImage(test)
             .withLimit(2)
             .run();
@@ -173,7 +184,7 @@ public class VectorDBService {
             System.out.println(result.getError());
             return;
         }
-        
+        fileWriter(result.getResult().toString());
         var responseImage = ((Map)((ArrayList)((Map)((Map)result
             .getResult()
             .getData())
@@ -181,6 +192,7 @@ public class VectorDBService {
             .get("Test"))
             .get(0))
             .get("image");
+        
         var responseImage2 = ((Map)((ArrayList)((Map)((Map)result
             .getResult()
             .getData())
@@ -189,9 +201,18 @@ public class VectorDBService {
             .get(1))
             .get("image");
 
+        // var responseImage3 = ((Map)((ArrayList)((Map)((Map)result
+        //     .getResult()
+        //     .getData())
+        //     .get("Get"))
+        //     .get("Test"))
+        //     .get(2))
+        //     .get("image");
+
         try {
             imageConverter(responseImage.toString(), "result_1");
             imageConverter(responseImage2.toString(), "result_2");
+            //imageConverter(responseImage3.toString(), "result_3");
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }

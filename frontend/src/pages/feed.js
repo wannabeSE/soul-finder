@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import Header from '../components/Header.js';
 import styles from '../styles/feed.module.css';
-import CardList from '../components/CardList.js';
+import CardList from '../components/PostCardList.js';
 
 
 const Feed = () => {

@@ -9,10 +9,7 @@
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 0%;
+  height: 40px;
 }
 
 .menu {
@@ -92,5 +89,11 @@
   background-color: rgb(255, 255, 255);
   color: #000000;
   border-radius: 30px;
+  cursor: pointer;
+}
+.chat{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
 }

@@ -10,9 +10,11 @@ function MyApp({ Component, pageProps }) {
   console.log(app);
 
   return (
-  
+    <div>
+    <Header/>
       <Component {...pageProps} />
-    
+    <footer/>
+    </div>
   );
 }
 

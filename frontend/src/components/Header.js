@@ -1,6 +1,6 @@
 import React, { useState ,useEffect } from 'react';
 import styles from '../styles/Header.module.css';  // Make sure the path is correct
-import Proimage from '../Assets/profile-pic.png'
+import Proimage from '../Assets/pic.jpg'
 import { useRouter } from 'next/router';
 
 const Header = () => {

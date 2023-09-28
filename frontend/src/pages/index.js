@@ -24,7 +24,7 @@ const LandingPage = () => {
 
   return (
     <div className={styles.container}>
-      <Header/>
+      
       {/* <header className={styles.header}>
         <div className={styles.logo}>Your Logo</div>
         <nav className={styles.nav}>

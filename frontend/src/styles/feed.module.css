@@ -40,6 +40,7 @@
     border: 1px solid #ccc;
     padding: 10px 20px;
     border-radius: 15px;
+    font-weight: 700;
   }
   .actionButton, .createPostButton ,.lostButton, .foundButton {
     margin: 0 15px;

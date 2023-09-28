@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Header from '../components/Header.js';
 import styles from '../styles/feed.module.css';
+import CardList from '../components/CardList.js';
+
 
 const Feed = () => {
     const [showLost, setShowLost] = useState(true);
@@ -18,7 +20,6 @@ const Feed = () => {
   
     return (
       <div className={styles.container}>
-        <Header />
         <div className={styles.insideNav}>
             <div className={styles.actionBar}>
             <button className={showLost ? styles.activeButton : styles.lostButton} onClick={() => setShowLost(true)}>Lost</button>
@@ -31,10 +32,12 @@ const Feed = () => {
         <div className={styles.posts}>
           {showLost ? (
             <div className={styles.lostPosts}>
-              {/* Render Lost Posts Here */}
+              <CardList />
             </div>
           ) : (
             <div className={styles.foundPosts}>
+              
+
               {/* Render Found Posts Here */}
             </div>
           )}

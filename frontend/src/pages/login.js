@@ -23,7 +23,7 @@ const Login = () => {
           <button type='submit' className={styles.loginButton}>Login</button>
         </form>
         <a href='#' className={styles.forgotPassword}>Forgot Password?  </a>
-        <a href='#' className={styles.signUp}> Sign Up</a>
+        <a href='#' className={styles.signUp}>Don't have an account? Sign Up</a>
       </div>
     </div>
   );

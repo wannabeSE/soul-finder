@@ -5,7 +5,6 @@ import Header from "../components/Header";
 const Register = () => {
   return (
     <div className={styles.registerContainer}>
-      <Header/>
       <div className={styles.card}>
         <div className={styles.logo}>{/* Our Logo */}</div>
         <h1 className={styles.title}>Create a new account</h1>

@@ -1,6 +1,5 @@
 package com.example.soulfinder.soulfinderbackend.Service;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,11 +35,18 @@ public class VectorDBService {
     
     @Autowired
     private VectorImageRepo vectorImageRepo;
+    @Autowired
+    private MongoDBServices mongoDBServices;
+
     private WeaviateClient client = WeaviateSchema.retConfig();
+
     private String createdDBClassName = "Test";
+
     @Autowired
     private CloudinaryImageUploadService cloudinaryImageUploadService;
+
     private int vectorDbReturnResponseLimit = 3;
+
     public String schemaClassBuilder(){
         
         Map<String, Object> img2vec = new HashMap<>();
@@ -74,7 +79,7 @@ public class VectorDBService {
     }
 
     public String dbClassStatus(){
-        Result <Schema> dbResult = client.schema().getter().run();
+        Result<Schema> dbResult = client.schema().getter().run();
         if(dbResult.hasErrors()){
 
             return "Error Occurred";
@@ -111,7 +116,7 @@ public class VectorDBService {
             .build();
 
         //* Uploading image to metadata to MongoDB
-        setVectorImgToMongoService(vectorImage);
+        mongoDBServices.setVectorImgToMongoService(vectorImage);
 
         //* Uploading Image to vector-db
         dataSchema.put("image", encodedString);
@@ -128,9 +133,7 @@ public class VectorDBService {
         return "Ok";
     }
 
-    public void setVectorImgToMongoService(VectorImage vectorImage){
-        vectorImageRepo.save(vectorImage);
-    }
+    
     public List<VectorImage> getAllVectorImgFromMongoService(){
         List<VectorImage> images = vectorImageRepo.findAll();
         return images;
@@ -153,8 +156,9 @@ public class VectorDBService {
     }
 
 
-    public void imageSearchVectorDB(MultipartFile file){
+    public Object imageSearchVectorDB(MultipartFile file){
         String encodedString = "";
+        List<Object> matchList = new ArrayList<>();
         try {
             encodedString = fileEncoder(file);
         } catch (Exception e) {
@@ -163,7 +167,6 @@ public class VectorDBService {
         
         NearImageArgument test = client.graphQL().arguments().nearImageArgBuilder()
         .image(encodedString)
-        //.distance(new Float(0.13453))
         .build();
         Field image = Field.builder().name("image").build();
         Field _additional = Field.builder()
@@ -182,7 +185,7 @@ public class VectorDBService {
         
         if (result.hasErrors()) {
             System.out.println(result.getError());
-            return;
+            return result.getError();
         }
         String jsonRes = new GsonBuilder()
             .setPrettyPrinting()
@@ -191,12 +194,13 @@ public class VectorDBService {
 
         fileWriter(jsonRes); //* to check json response */
 
-        System.out.println(idRetriever(jsonRes, 0));
-        System.out.println(idRetriever(jsonRes, 0));
+        
+        for(int i =0; i<vectorDbReturnResponseLimit; i++){
+            
+            matchList.add(idRetriever(jsonRes, i));
+        }
 
-
-        imageRetriever(jsonRes, 0, "res_1");
-        imageRetriever(jsonRes, 1, "res_2");
+        return matchList;
         
     }
     public void deleteVectorDBClass(String className){
@@ -239,8 +243,11 @@ public class VectorDBService {
             System.err.println(e.getLocalizedMessage());
         }
     }
-    public String idRetriever(String objectToDecode, int index){ // TODO: Might need to refactor this method
+
+    public Object idRetriever(String objectToDecode, int index){
+        
         ObjectMapper mapper = new ObjectMapper();
+
         try {
             JsonNode root = mapper.readTree(objectToDecode);
             JsonNode id = root
@@ -249,32 +256,35 @@ public class VectorDBService {
                 .get(index)
                 .path("_additional")
                 .path("id");
-            String response = id.asText();
-            return response;  
-        } catch (Exception e) {
-            return e.getLocalizedMessage();
-        }
-    }
-    public String imageRetriever(String objectToDecode, int index, String imgName){ // TODO: Might need to refactor this method
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            JsonNode rootNode = mapper.readTree(objectToDecode);
-            JsonNode image = rootNode
-                .path("Get")
-                .path("Test")
-                .get(index)
-                .path("image");
-            String imageString = image.asText();
-            imageConverter(imageString, imgName);
-            return imageString;
+            String idString = id.asText();
+            return mongoDBServices.returnImageMatches(idString);
+ 
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
     }
 
-    public void imageConverter(String encodedString, String img) throws IOException{
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-        FileUtils.writeByteArrayToFile(new File(img+".jpg"), decodedBytes);
-    }
+    //? This method is  DEPRECATED for now
+    // public String imageRetriever(String objectToDecode, int index, String imgName){ 
+    //     ObjectMapper mapper = new ObjectMapper();
+    //     try {
+    //         JsonNode rootNode = mapper.readTree(objectToDecode);
+    //         JsonNode image = rootNode
+    //             .path("Get")
+    //             .path("Test")
+    //             .get(index)
+    //             .path("image");
+    //         String imageString = image.asText();
+    //         imageConverter(imageString, imgName);
+    //         return imageString;
+    //     } catch (Exception e) {
+    //         return e.getLocalizedMessage();
+    //     }
+    // }
+    //? This method is not needed for now
+    // public void imageConverter(String encodedString, String img) throws IOException{
+    //     byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+    //     FileUtils.writeByteArrayToFile(new File(img+".jpg"), decodedBytes);
+    // }
 
 }

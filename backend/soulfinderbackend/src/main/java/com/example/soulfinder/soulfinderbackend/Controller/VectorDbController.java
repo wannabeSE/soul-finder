@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +21,14 @@ import com.example.soulfinder.soulfinderbackend.Service.VectorDBService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/vectordb")
+@RequestMapping("api/vector-db")
 public class VectorDbController {
     
   
     @Autowired
     private VectorDBService vDbService;
     
-    @GetMapping("/dbstatus")
+    @GetMapping("/db-status")
     public String dbActiveStatus(){
       
         if(vDbService.dbClassStatus() == "Error Occurred"){
@@ -40,12 +39,12 @@ public class VectorDbController {
         
     }
 
-    @PostMapping("/createdb")
+    @PostMapping("/create-db")
     public void createDB(){
         vDbService.schemaClassBuilder();
     }
 
-    @PostMapping("/deletedb")
+    @PostMapping("/delete-db")
     public void deleteVectorDb(){
         vDbService.deleteVectorDBClass("Test");
     }
@@ -68,30 +67,32 @@ public class VectorDbController {
         }
     }
 
-    @GetMapping("/dbcheck")
+    @GetMapping("/db-check")
     public ResponseEntity<?> dbCheck(){
         Object response = vDbService.dbItemCounter();
         return ResponseEntity.status(HttpStatus.OK)
         .body(response);
     }
 
-    @PostMapping("/get-image-byid/{id}")
+    @PostMapping("/get-image-by-id/{id}")
     public void getImageById(@PathVariable String id){
         vDbService.getImageByIdService(id);
     }
 
-    @PostMapping("/delete-image-byid/{id}")
+    @PostMapping("/delete-image-by-id/{id}")
     public void deleteImageById(@PathVariable String id){
         vDbService.deleteImageByIdService(id);
     }
 
     @PostMapping("/search")
-    public void imageSearch(@RequestParam("image") MultipartFile file){
-        try {
-            vDbService.imageSearchVectorDB(file);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public ResponseEntity<?> imageSearch(@RequestParam("image") MultipartFile file){
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(vDbService.imageSearchVectorDB(file));
+        // try {
+        //     vDbService.imageSearchVectorDB(file);
+        // } catch (Exception e) {
+        //     System.out.println(e.getMessage());
+        // }
 
     }
 

@@ -42,7 +42,7 @@
     flex-direction: row;
     justify-content: space-around;
 }
-.contactButton {
+.acceptButton, .declineButton {
     cursor: pointer;
     padding: 10px;
     border-radius: 15px;

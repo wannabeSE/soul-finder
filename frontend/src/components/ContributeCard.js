@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from '../styles/matchCard.module.css';
+import styles from '../styles/contributeCard.module.css';
 import Image from 'next/image';
 import postImg from "./pic.jpg";
 
-const MatchCard = () => {
+const ContributeCard = () => {
   return (
     <div className={styles.container}>
         <div className={styles.postContainer}>
@@ -23,11 +23,13 @@ const MatchCard = () => {
             </div>
         </div>
         <div className={styles.buttons}>
-            <button className={styles.contactButton}> Contact</button>
+            <button className={styles.acceptButton}> Accept</button>
+            <button className={styles.declineButton}> Decline</button>
+
         </div>
     </div>
     
   );
 };
 
-export default MatchCard;
+export default ContributeCard;

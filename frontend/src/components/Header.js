@@ -31,7 +31,8 @@ const Header = () => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo} onClick={() => { window.location.href = '/'; setActivePage('home'); }}>
-        <img className={styles.logo} src='https://png.pngtree.com/png-clipart/20190611/original/pngtree-wolf-logo-png-image_2306634.jpg' alt="logo"/>
+        {/* <img className={styles.logo} src='https://png.pngtree.com/png-clipart/20190611/original/pngtree-wolf-logo-png-image_2306634.jpg' alt="logo"/> */}
+        Find the soul
       </div>
       <div className={styles.menu}>
         <div className={activePage === 'feed' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/feed'; setActivePage('feed'); }}>Feed</div>

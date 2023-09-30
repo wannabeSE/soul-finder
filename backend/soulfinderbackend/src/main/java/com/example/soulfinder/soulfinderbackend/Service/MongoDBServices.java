@@ -20,9 +20,11 @@ public class MongoDBServices {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void setVectorImgToMongoService(VectorImage vectorImage){
 
-        vectorImageRepo.save(vectorImage);
+    public void setVectorImgToMongoService(VectorImage vectorImage){
+        
+
+        vectorImageRepo.insert(vectorImage);
     }
 
     public Object returnImageMatches(String idToMatch){
@@ -30,7 +32,7 @@ public class MongoDBServices {
         List<VectorImage> response = mongoTemplate.find(new Query()
             .addCriteria(Criteria.where("vectorDbId").is(idToMatch)),
             VectorImage.class);
-        
+        System.out.println(response);
         return response;
     }
 }

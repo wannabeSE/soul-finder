@@ -1,5 +1,7 @@
 package com.example.soulfinder.soulfinderbackend.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,20 +32,20 @@ public class UserController {
     }
 
     @GetMapping(value="/get-all-users")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK)
         .body(userService.getAllUsersService());
     }
 
-    @GetMapping("/get-user/{userId}")
+    @GetMapping("/get-user-by-id/{userId}")
     public ResponseEntity<Object> getUserById(@PathVariable String userId){
         return ResponseEntity.status(HttpStatus.OK)
         .body(userService.getUserByIdService(userId));
     }
 
-    @GetMapping("/get-user-email/{email}")
+    @GetMapping("/get-user-by-email/{email}")
     public ResponseEntity<User> getUserEmail(@PathVariable String email){
         return ResponseEntity.status(HttpStatus.OK)
-        .body(userService.getUserEmailidService(email));
+        .body(userService.getUserEmailIdService(email));
     }
 }

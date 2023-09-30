@@ -1,5 +1,6 @@
 package com.example.soulfinder.soulfinderbackend.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,29 +10,35 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.PostRepos;
-import com.example.soulfinder.soulfinderbackend.Wrapper.PostObjectWrapper;
+
 
 @Service
 public class PostService {
     
     @Autowired
-    PostRepos postRepos;
+    private PostRepos postRepos;
+    @Autowired
+    private VectorDBService vectorDBService;
     @Autowired
     private MongoTemplate mongoTemplate;
     
-    public Post savePostService(PostObjectWrapper postObject){
+    public Post savePostService(Post postObject, MultipartFile[] files){
 
-        Post postObj= Post.builder()
-            .body(postObject.getPostData())
-            .userId(postObject.getUserId())
-            .vectorImgIds(postObject.getVecImgIds())
-            .build();
+        List<String> vectorImgIds = new ArrayList<>();
+        try {
+            vectorImgIds = vectorDBService.vectorDbImageUploader(files);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        
+        postObject.setVectorImgIds(vectorImgIds);
+        Post post = postRepos.insert(postObject);
 
-        Post post = postRepos.insert(postObj);
         String postId = post.getPostId();
         
         mongoTemplate

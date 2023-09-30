@@ -30,6 +30,7 @@ import io.weaviate.client.v1.schema.model.Property;
 import io.weaviate.client.v1.schema.model.Schema;
 import io.weaviate.client.v1.schema.model.WeaviateClass;
 
+
 @Service
 public class VectorDBService {
     
@@ -84,10 +85,7 @@ public class VectorDBService {
 
             return "Error Occurred";
         }
-        String jsonRes = new GsonBuilder()
-            .setPrettyPrinting()
-            .create()
-            .toJson(dbResult.getResult());
+        String jsonRes = jsonResponseCreator(dbResult.getResult());
 
         return jsonRes;
     }
@@ -100,43 +98,50 @@ public class VectorDBService {
         return encodedString;
     }
     
-    public String vectorDbImageUploader(MultipartFile fl) throws IOException{
+    public List<String> vectorDbImageUploader(MultipartFile[] files) throws IOException{ 
         
-        String uniqueID = UUID.randomUUID().toString();
-        System.out.println(uniqueID);
+        List<String> vectorImgIdList = new ArrayList<>();
         Map<String, Object> dataSchema = new HashMap<>();
-        String encodedString = fileEncoder(fl);
 
-        //* Uploads to Cloudinary storage bucket and gets the link
-        String imgUrl = cloudinaryImageUploadService.upload(fl);    
+        for (MultipartFile file : files){
 
-        VectorImage vectorImage = VectorImage.builder()
-            .vectorDbId(uniqueID)
-            .imgUrl(imgUrl)
-            .build();
+            String uniqueID = UUID.randomUUID().toString();
 
-        //* Uploading image to metadata to MongoDB
-        mongoDBServices.setVectorImgToMongoService(vectorImage);
+            System.out.println(uniqueID); //* for debugging purpose */
 
-        //* Uploading Image to vector-db
-        dataSchema.put("image", encodedString);
-        Result<WeaviateObject> result = client.data().creator()
-        .withClassName(createdDBClassName)
-        .withProperties(dataSchema)
-        .withID(uniqueID)
-        .run();
+            vectorImgIdList.add(uniqueID);
 
-        if(result.hasErrors()){
-            System.out.println("file upload failed");
-            return "failed";
-        }System.out.println("Successfully uploaded");
-        return "Ok";
+            String encodedString = fileEncoder(file);
+
+            String imgUrl = cloudinaryImageUploadService.upload(file); 
+             
+            VectorImage vectorImage = VectorImage.builder()
+                .vectorDbId(uniqueID)
+                .imgUrl(imgUrl)
+                .build();
+            mongoDBServices.setVectorImgToMongoService(vectorImage);
+            dataSchema.put("image", encodedString);
+            Result<WeaviateObject> result = client
+                .data()
+                .creator()
+                .withClassName(createdDBClassName)
+                .withProperties(dataSchema)
+                .withID(uniqueID)
+                .run();
+            if(result.hasErrors()){
+                System.out.println("Error Occurred");
+            }else{
+                System.out.println("Post Image upload success");
+            }
+        }
+        return vectorImgIdList;
+        
     }
 
     
     public List<VectorImage> getAllVectorImgFromMongoService(){
-        List<VectorImage> images = vectorImageRepo.findAll();
-        return images;
+        List<VectorImage> imageList = vectorImageRepo.findAll();
+        return imageList;
     }
     public Object dbItemCounter(){
 
@@ -165,17 +170,23 @@ public class VectorDBService {
             System.out.println(e.getLocalizedMessage());
         }
         
-        NearImageArgument test = client.graphQL().arguments().nearImageArgBuilder()
-        .image(encodedString)
-        .build();
+        NearImageArgument test = client
+            .graphQL()
+            .arguments()
+            .nearImageArgBuilder()
+            .image(encodedString)
+            .build();
+
         Field image = Field.builder().name("image").build();
+
         Field _additional = Field.builder()
-        .name("_additional")
-        .fields(new Field[]{ 
-          Field.builder().name("distance").build(),
-          Field.builder().name("certainty").build(),
-          Field.builder().name("id").build() 
-        }).build();
+            .name("_additional")
+            .fields(new Field[]{ 
+            Field.builder().name("distance").build(),
+            Field.builder().name("certainty").build(),
+            Field.builder().name("id").build() 
+            }).build();
+
         Result<GraphQLResponse> result = client.graphQL().get()
             .withClassName(createdDBClassName)
             .withFields(image, _additional)
@@ -187,15 +198,12 @@ public class VectorDBService {
             System.out.println(result.getError());
             return result.getError();
         }
-        String jsonRes = new GsonBuilder()
-            .setPrettyPrinting()
-            .create()
-            .toJson(result.getResult().getData());
+        String jsonRes = jsonResponseCreator(result.getResult().getData());
 
         fileWriter(jsonRes); //* to check json response */
 
         
-        for(int i =0; i<vectorDbReturnResponseLimit; i++){
+        for(int i = 0; i < vectorDbReturnResponseLimit; i++){
             
             matchList.add(idRetriever(jsonRes, i));
         }
@@ -203,22 +211,26 @@ public class VectorDBService {
         return matchList;
         
     }
-    public void deleteVectorDBClass(String className){
+    public String deleteVectorDBClass(String className){
         Result<?> res= client.schema().classDeleter().withClassName(className).run();
         if(res.hasErrors()){
-            System.out.println("Delete Unsuccessful");
-            return;
+
+            return "Delete Unsuccessful";
         }
-        System.out.println("Deletion Successful");
+        return "Deletion Successful";
     }
 
-    public void getImageByIdService(String id){
+    public String getImageByIdService(String id){
+
         Result<List<WeaviateObject>> result = client.data().objectsGetter()
             .withClassName(createdDBClassName)
             .withID(id)
             .run();
 
-        fileWriter(result.getResult().toString());
+        String jsonRes = jsonResponseCreator(result.getResult());
+        fileWriter(jsonRes);
+        return jsonRes;
+        
     }
 
     public void deleteImageByIdService(String idToDelete){
@@ -233,6 +245,7 @@ public class VectorDBService {
         }
         System.out.println("Deletion successful");
     }
+    //*To check json response */
     public void fileWriter(String content){
         try {
             FileWriter fileWriter = new FileWriter("res.txt");
@@ -264,6 +277,13 @@ public class VectorDBService {
         }
     }
 
+    public String jsonResponseCreator(Object result){
+        String jsonRes = new GsonBuilder()
+            .setPrettyPrinting()
+            .create()
+            .toJson(result);
+        return jsonRes;
+    }
     //? This method is  DEPRECATED for now
     // public String imageRetriever(String objectToDecode, int index, String imgName){ 
     //     ObjectMapper mapper = new ObjectMapper();

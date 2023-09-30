@@ -26,14 +26,14 @@ public class UserService {
     }   
 
     public List<User> getAllUsersService(){
-        List <User> userList = userRepo.findAll();
+        List<User> userList = userRepo.findAll();
         return userList;
     }
 
     public Object getUserByIdService(String userObjectId){
         return userRepo.findById(userObjectId);
     }
-    public User getUserEmailidService(String email){
+    public User getUserEmailIdService(String email){
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(email));
         User user = mongoTemplate.findOne(query, User.class);

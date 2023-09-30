@@ -1,7 +1,7 @@
 package com.example.soulfinder.soulfinderbackend.Controller;
 
 
-import java.io.IOException;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,24 +49,6 @@ public class VectorDbController {
         vDbService.deleteVectorDBClass("Test");
     }
 
-    @PostMapping(value="/file-upload")
-    public ResponseEntity<?> fileUploader(@RequestParam("images") MultipartFile[] files) throws IOException {
-        String response = "";
-
-        for (MultipartFile file : files) {
-            response = vDbService.vectorDbImageUploader(file);
-        }
-        
-        if(response == "Ok"){
-            return ResponseEntity.status(HttpStatus.OK)
-        .body ("Uploaded Successfully");
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        .body ("Uploading failed");
-        }
-    }
-
     @GetMapping("/db-check")
     public ResponseEntity<?> dbCheck(){
         Object response = vDbService.dbItemCounter();
@@ -88,11 +70,6 @@ public class VectorDbController {
     public ResponseEntity<?> imageSearch(@RequestParam("image") MultipartFile file){
         return ResponseEntity.status(HttpStatus.OK)
             .body(vDbService.imageSearchVectorDB(file));
-        // try {
-        //     vDbService.imageSearchVectorDB(file);
-        // } catch (Exception e) {
-        //     System.out.println(e.getMessage());
-        // }
 
     }
 

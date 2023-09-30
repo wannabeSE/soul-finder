@@ -98,7 +98,7 @@ public class VectorDBService {
         return encodedString;
     }
     
-    public List<String> vectorDbImageUploader(MultipartFile[] files) throws IOException{ 
+    public List<String> vectorDbImageUploader(MultipartFile[] files, String userId) throws IOException{ 
         
         List<String> vectorImgIdList = new ArrayList<>();
         Map<String, Object> dataSchema = new HashMap<>();
@@ -107,19 +107,25 @@ public class VectorDBService {
 
             String uniqueID = UUID.randomUUID().toString();
 
-            System.out.println(uniqueID); //* for debugging purpose */
+            System.out.println(uniqueID); //* for debugging purpose *//
 
             vectorImgIdList.add(uniqueID);
 
             String encodedString = fileEncoder(file);
 
+            //? Storing image in cloud storage and getting image URL
             String imgUrl = cloudinaryImageUploadService.upload(file); 
              
             VectorImage vectorImage = VectorImage.builder()
                 .vectorDbId(uniqueID)
                 .imgUrl(imgUrl)
+                .userId(userId)
                 .build();
+                
+            //? Storing image meta data in MongDB
             mongoDBServices.setVectorImgToMongoService(vectorImage);
+
+            //? Storing image meta data in Weaviate VectorDB
             dataSchema.put("image", encodedString);
             Result<WeaviateObject> result = client
                 .data()
@@ -128,6 +134,7 @@ public class VectorDBService {
                 .withProperties(dataSchema)
                 .withID(uniqueID)
                 .run();
+
             if(result.hasErrors()){
                 System.out.println("Error Occurred");
             }else{

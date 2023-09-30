@@ -23,7 +23,7 @@ public class VectorImage{
     @Id
     private String imgId;
     private String vectorDbId;
-    //private String postId;
+    private String userId;
     private String imgUrl;
     
 }

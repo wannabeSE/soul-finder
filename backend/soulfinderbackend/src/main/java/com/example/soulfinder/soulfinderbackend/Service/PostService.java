@@ -31,11 +31,11 @@ public class PostService {
 
         List<String> vectorImgIds = new ArrayList<>();
         try {
-            vectorImgIds = vectorDBService.vectorDbImageUploader(files);
+            vectorImgIds = vectorDBService.vectorDbImageUploader(files, postObject.getUserId());
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
-        
+
         postObject.setVectorImgIds(vectorImgIds);
         Post post = postRepos.insert(postObject);
 

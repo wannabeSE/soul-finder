@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.UserRepo;
 
@@ -18,9 +20,13 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
+    private CloudinaryImageUploadService cloudinaryImageUploadService;
+    @Autowired
     private MongoTemplate mongoTemplate;
 
-    public User userCreationService(User user){
+    public User userCreationService(User user, MultipartFile file){
+        String dpUrl = cloudinaryImageUploadService.upload(file);
+        user.setDpUrl(dpUrl);
         User createdUser = userRepo.save(user);
         return createdUser;
     }   

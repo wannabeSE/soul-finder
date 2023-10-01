@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.soulfinder.soulfinderbackend.Model.Post;
 import com.example.soulfinder.soulfinderbackend.Model.User;
+import com.example.soulfinder.soulfinderbackend.Model.VectorImage;
 import com.example.soulfinder.soulfinderbackend.Repository.PostRepos;
 
 
@@ -85,11 +86,18 @@ public class PostService {
             Post.class);
     }
 
-    public Object updatePostTypeService( Map<String,String> data){
+    public Object updatePostTypeService(Map<String,String> data){
         return mongoTemplate
             .update(Post.class)
             .matching(Criteria.where("postId").is(data.get("postId")))
             .apply(Update.update("postType", data.get("type")))
             .first();
+    }
+
+    public Object getPostImageService(String vecId){
+        return mongoTemplate
+            .find(new Query()
+            .addCriteria(Criteria.where("vectorDbId").is(vecId)), 
+            VectorImage.class);
     }
 }

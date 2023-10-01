@@ -2,7 +2,7 @@ package com.example.soulfinder.soulfinderbackend.Controller;
 
 
 import java.util.List;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,5 +63,11 @@ public class PostController {
     public ResponseEntity<List<Post>> getAllFoundPosts(@PathVariable String type){
         return ResponseEntity.status(HttpStatus.OK)
         .body(postService.getAllFoundPostService(type));
+    }
+
+    @PostMapping("/update-post-type")
+    public ResponseEntity<Object> updatePostType(@RequestBody Map<String, String> payload){
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(postService.updatePostTypeService(payload));
     }
 }

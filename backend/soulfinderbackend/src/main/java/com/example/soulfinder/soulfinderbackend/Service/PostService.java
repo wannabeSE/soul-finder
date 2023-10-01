@@ -2,13 +2,16 @@ package com.example.soulfinder.soulfinderbackend.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -80,5 +83,13 @@ public class PostService {
             .find(new Query()
             .addCriteria(Criteria.where("postType").is(foundPost)),
             Post.class);
+    }
+
+    public Object updatePostTypeService( Map<String,String> data){
+        return mongoTemplate
+            .update(Post.class)
+            .matching(Criteria.where("postId").is(data.get("postId")))
+            .apply(Update.update("postType", data.get("type")))
+            .first();
     }
 }

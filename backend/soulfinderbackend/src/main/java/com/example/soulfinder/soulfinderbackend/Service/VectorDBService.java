@@ -46,7 +46,7 @@ public class VectorDBService {
     @Autowired
     private CloudinaryImageUploadService cloudinaryImageUploadService;
 
-    private int vectorDbReturnResponseLimit = 3;
+    private int vectorDbReturnResponseLimit = 4;
 
     public String schemaClassBuilder(){
         

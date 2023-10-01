@@ -20,7 +20,7 @@ import com.example.soulfinder.soulfinderbackend.Model.Post;
 import com.example.soulfinder.soulfinderbackend.Service.PostService;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("api/post/")
 public class PostController {

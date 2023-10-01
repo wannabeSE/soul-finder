@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect  } from 'react';
 import styles from '../styles/feed.module.css';
 import CardList from '../components/PostCardList';
 import ReactCrop from 'react-image-crop';
@@ -15,6 +15,7 @@ const Feed = () => {
     const [images, setImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [state,setState] = useState(null);
+    const [posts, setPosts] = useState([]);
 
     const auth = getAuth();
     const user = auth.currentUser;
@@ -24,6 +25,22 @@ const Feed = () => {
     // {
     //   router.push('/login');
     // }
+
+    useEffect(() => {
+      const fetchPosts = async () => {
+        try {
+          const apiUrl = showLost ? 'http://localhost:8081/api/get-lost-posts/lost' : 'http://localhost:8081/api/get-found-posts/found';
+          const response = await axios.get(apiUrl);
+          setPosts(response.data);
+        } catch (error) {
+          console.error('Error fetching posts:', error);
+        }
+      };
+    
+      fetchPosts();
+    }, [showLost]);
+
+    console.log(posts);
 
 
     const handleImageChange = (e) => {
@@ -113,11 +130,11 @@ const Feed = () => {
         <div className={styles.posts}>
           {showLost ? (
             <div className={styles.lostPosts}>
-              <CardList />
+              <CardList posts={posts} />
             </div>
           ) : (
             <div className={styles.foundPosts}>
-              {/* Render Found Posts Here */}
+              <CardList posts={posts} />
             </div>
           )}
         </div>

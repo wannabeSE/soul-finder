@@ -2,18 +2,14 @@ import React from 'react';
 import Card from './PostCard';
 import styles from '../styles/postCardList.module.css';
 
-const CardList = () => {
+const CardList = ({ posts }) => {
   return (
     <div className={styles.container}>
-      {/* {posts.map((post, index) => (
-        <Card />
-      ))} */}
-        <div className={styles.posts}>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-        </div>
+      <div className={styles.posts}>
+        {posts.map((post, index) => (
+          <Card key={index} post={post} />
+        ))}
+      </div>
     </div>
   );
 };

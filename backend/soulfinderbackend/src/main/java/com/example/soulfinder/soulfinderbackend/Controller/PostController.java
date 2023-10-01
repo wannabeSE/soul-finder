@@ -27,11 +27,6 @@ public class PostController {
     @Autowired
     PostService postService;
 
-    @GetMapping("/")
-    public String hello(){
-        return "server is up 🔥";
-    }
-
     @GetMapping("/get-all-posts")
     public List<Post> getPost(){
         List<Post> posts = postService.getAllPostService();

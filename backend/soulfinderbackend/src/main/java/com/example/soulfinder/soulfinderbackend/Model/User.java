@@ -21,8 +21,8 @@ public class User{
     
     @Id
     private String userId;
+    private String firebaseUID;
     private String email;
-    private String password;
     private String name;
     private String dpUrl;
     private List<String> postIds;

@@ -11,122 +11,175 @@
     justify-content: space-between;
 }
   
-  .actionBar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 20px;
-    width: 100%;
-  }
-  .stats {
-    display: flex;
-    width: 25%;
-  }
-  .createButtonDiv{
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-  .activeButton {
-    margin: 0 15px;
-    cursor: pointer;
-    width :40%;
-    height: 40px;
-    background-color: #ffffff;
-    color: rgb(65, 67, 69);
-    border-radius: 50px;
-    border: 1px solid #ccc;
-    padding: 10px 20px;
-    border-radius: 15px;
-    font-weight: 700;
-  }
-  .actionButton, .createPostButton ,.lostButton, .foundButton {
-    margin: 0 15px;
-    cursor: pointer;
-    width :30%;
-    height: 40px;
-    background-color: rgb(65, 67, 69);
-    color: #ffffff;
-    border-radius: 100px;
-    border: 1px solid #ccc;
-    padding: 10px 20px;
-    border-radius: 15px;
-  }
+.actionBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+.stats {
+  display: flex;
+  width: 25%;
+}
 
+.createButtonDiv{
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.activeButton {
+  margin: 0 15px;
+  cursor: pointer;
+  width :40%;
+  height: 40px;
+  background-color: #43455B;
+  color: #ffffff;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 15px;
+  font-weight:600;
+}
+.actionButton, .createPostButton ,.lostButton, .foundButton {
+  margin: 0 15px;
+  cursor: pointer;
+  width :30%;
+  height: 40px;
+  background-color: #ffffff;
+  color: #43455B;
+  border-radius: 100px;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 15px;
   
-  .posts {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .lostPosts, .foundPosts {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+}
 
-  .dialog {
-    position: fixed;
-    justify-content: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color:aliceblue;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    width: 50%;
-    height: 77%;
-    margin-top: 20px;
-    overflow-y: auto;
-  }
+
+.posts {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lostPosts, .foundPosts {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dialog {
+  position: fixed;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color:aliceblue;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  height: 90%;
+  margin-top: 20px;
+  overflow-y: auto;
+}
+
+.createPost{
+  background-color: var(--theme-col);
+  border-radius: 10px;
+  padding: 10px;
+}
+.bodydiv{
+  padding: 10px;
+}
+.body{
+  height: 70px;
+  width: 100%;
   
-  .createPost{
-    background-color: var(--theme-col);
-    border-radius: 10px;
-    padding: 10px;
-  }
-  /* .personName {
-    width: 50%;
-    justify-content: center;
-  } */
-  
-  .imageUpload, .imageBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    background-color: var(--theme-col);
-    border-radius: 10px;
-    width: 100%;
-    height: 260px;
-    cursor: pointer;
-  }
-  
-  .imageUpload img {
-    max-width: min-content;
-    max-height: 100%;
-  }
-  .buttons{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 25px;
-  }
-  .postButton, .closeButton {
-    background-color:var(--theme-col) ;
-    color: var(--text-col);
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 10px;
-    border: none;
-    width: 30%;
-    height: 40px;
-    font-weight: bold;
-    font-size: medium;
-  }
+}
+/* .personName {
+  width: 50%;
+  justify-content: center;
+} */
+
+.imageUpload, .imageBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 7px;
+  background-color: var(--theme-col);
+  border-radius: 10px;
+  width: 100%;
+  height: 45vh;
+  cursor: pointer;
+}
+
+.imageUpload img {
+  max-width: min-content;
+  max-height: 100%;
+}
+.scrollButtons
+{
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
+  padding: 5px;
+  gap: 10px;
+}
+.nextButton, .prevButton{
+  width: 12px;
+  height: 12px;
+  align-items: center;
+  border: none;
+}
+.buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+.postButton, .closeButton {
+  background-color:var(--theme-col) ;
+  color: var(--text-col);
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  width: 30%;
+  height: 40px;
+  font-weight: bold;
+  font-size: medium;
+}
+.scrollableContainer {
+  display: flex;
+  overflow-x: auto;
+  white-space: wrap;
+}
+
+.scrollableImage {
+  max-width: 100px; /* or any size you prefer */
+  margin-right: 10px;
+}
+
+.cameraEmoji{
+  height: 100px;
+  width: 100px;
+}
+
+.cropModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}

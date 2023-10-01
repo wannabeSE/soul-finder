@@ -5,7 +5,7 @@
     background-color: rgb(255, 255, 255);
     margin-bottom: 50px;
     padding: 10px;
-    height: max-content;
+    min-height: 400px;
     width: 100%;
     border-radius: 10px;
     align-items:flex-start;
@@ -28,22 +28,28 @@
 .authorName{
     font-weight: 600;
     font-size: medium;
-    align-items: center;
     text-align: center;
-    
 }
 
 .date{
-    margin-top: 10px;
-    margin-left: 15%;
+    margin-top: 1px;
+    margin-left: 100px;
+}
+
+.authorName,.date{
+    color: var(--text-col);
 }
 .postImage{
-    flex: 3;
-    height: 350px;
-    margin-top: 50px;
-    position: relative;
+    flex: 1;
+    width: 300px;
+    margin-top: 10px;
+    object-fit: cover;
 }
-.image{
-    object-fit:cover;
+.foundButton{
+    padding: 10px;
+    border: none;   
+    border-radius: 10px;
+    margin-top: 10px;
+    color: black;
+    cursor: pointer;
 }
-  

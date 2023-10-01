@@ -23,7 +23,7 @@ const MatchCard = () => {
             </div>
         </div>
         <div className={styles.buttons}>
-            <button className={styles.contactButton}> Contact</button>
+            <button className={styles.messageButton}>Direct Message</button>
         </div>
     </div>
     

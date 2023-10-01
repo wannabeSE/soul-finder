@@ -51,4 +51,16 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK)
         .body(postService.getPostByUserIdService(userId));
     }
+
+    @GetMapping("/get-lost-posts/{type}")
+    public ResponseEntity<List<Post>> getAllLostPosts(@PathVariable String type){
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(postService.getAllLostPostService(type));
+    }
+
+    @GetMapping("/get-found-posts/{type}")
+    public ResponseEntity<List<Post>> getAllFoundPosts(@PathVariable String type){
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(postService.getAllFoundPostService(type));
+    }
 }

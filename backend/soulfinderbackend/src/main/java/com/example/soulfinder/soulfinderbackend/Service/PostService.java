@@ -67,4 +67,18 @@ public class PostService {
             .addCriteria(Criteria.where("firebaseUID").is(userId)), //?userId changed to firebaseUID
              Post.class);
     }
+
+    public List<Post> getAllLostPostService(String lostPost){
+        return mongoTemplate
+            .find(new Query()
+            .addCriteria(Criteria.where("postType").is(lostPost)),
+            Post.class);
+    }
+    
+    public List<Post> getAllFoundPostService(String foundPost){
+        return mongoTemplate
+            .find(new Query()
+            .addCriteria(Criteria.where("postType").is(foundPost)),
+            Post.class);
+    }
 }

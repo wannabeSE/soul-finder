@@ -25,6 +25,7 @@ public class Post {
     private String postId;
     private String body;
     private String userId;
+    private String postType;
     @JsonIgnore
     private List<String> vectorImgIds;
     

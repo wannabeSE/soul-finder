@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.example.soulfinder.soulfinderbackend.Model.User;
 import com.example.soulfinder.soulfinderbackend.Repository.UserRepo;
@@ -19,7 +19,7 @@ public class UserService {
     
     @Autowired
     private UserRepo userRepo;
-    
+
     @Autowired
     private MongoTemplate mongoTemplate;
 

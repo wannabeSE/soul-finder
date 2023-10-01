@@ -43,7 +43,7 @@ public class PostService {
         
         mongoTemplate
             .update(User.class)
-            .matching(Criteria.where("userId").is(postObject.getUserId()))
+            .matching(Criteria.where("firebaseUID").is(postObject.getUserId())) //?userId changed to firebaseUID
             .apply(new Update().push("postIds").value(postId))
             .first();
         
@@ -64,7 +64,7 @@ public class PostService {
     public List<Post> getPostByUserIdService(String userId){
         return mongoTemplate
             .find(new Query()
-            .addCriteria(Criteria.where("userId").is(userId)),
+            .addCriteria(Criteria.where("firebaseUID").is(userId)), //?userId changed to firebaseUID
              Post.class);
     }
 }

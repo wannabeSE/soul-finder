@@ -26,23 +26,23 @@
 .menuItem {
   margin: 0 15px;
   padding: 10px 20px 10px 20px;
-  background-color: #43455B;
-  color: #fff;
-  font-size:medium;
+  background-color: #ffffff;
+  color: #43455B;
+  font-weight: 500;
   border-radius: 30px;
   cursor: pointer;
 }
 .menuItem:hover{
-  background-color:#fff ;
-  color: var(--text-col) ;
-  /* .activeMenuItem{
-    background-color: #43455B;
-    color: #fff; 
-  } */
+  background-color:#43455B ;
+
+  color: #ffffff ;
+  
 }
 
 .notificationBell {
   margin-left: 5px;
+  height: 15px;
+  width: 15px;
 }
 
 .profile {
@@ -90,14 +90,19 @@
 .activeMenuItem {
   margin: 0 15px;
   padding: 10px 20px 10px 20px;
-  background-color: rgb(255, 255, 255);
-  color: #000000;
+  background-color: #43455B;
+  font-weight: 500;
+  color: #ffffff;
   border-radius: 30px;
   cursor: pointer;
 }
-.chat{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
+.chatLogo{
+  width: 20px;
+  height: 20px;
+}
+
+.matchDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

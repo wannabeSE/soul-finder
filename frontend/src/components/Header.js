@@ -1,11 +1,13 @@
 import React, { useState ,useEffect } from 'react';
 import styles from '../styles/Header.module.css';  // Make sure the path is correct
 import { useRouter } from 'next/router';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Header = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const router = useRouter();
   const [activePage, setActivePage] = useState('');  // Track the active page
+  const auth = getAuth();
 
   useEffect(() => {
     // You can add more paths as needed
@@ -27,6 +29,13 @@ const Header = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      router.push('/login');  // Redirect to home page after successful logout
+    }).catch((error) => {
+      console.error('Error signing out:', error);
+    });
+  };
 
   return (
     <nav className={styles.navbar}>
@@ -37,12 +46,14 @@ const Header = () => {
       <div className={styles.menu}>
         <div className={activePage === 'feed' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/feed'; setActivePage('feed'); }}>Feed</div>
         <div className={activePage === 'match' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/match'; setActivePage('match'); }}>
-          Match
-          <span className={styles.notificationBell}>🔔</span>
+          <div className={styles.matchDiv}>
+            <div >Match</div>
+            <img  className = {styles.notificationBell} src = "/bell-solid.svg" />
+          </div>
         </div>
         <div className={activePage === 'contribute' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/contribute'; setActivePage('contribute'); }}>Contribute</div>
         <div className={activePage === 'chat' ? styles.activeMenuItem : styles.menuItem} onClick={() => { window.location.href = '/chat'; setActivePage('chat'); }}>
-          <img className={styles.chat} src='https://png.pngtree.com/png-clipart/20190611/original/pngtree-wolf-logo-png-image_2306634.jpg'/>
+          <img className={styles.chatLogo} src='\comments-solid.svg'/>
         </div>
         <div className={styles.profile}>
           <img src='https://png.pngtree.com/png-clipart/20190611/original/pngtree-wolf-logo-png-image_2306634.jpg' alt='Pro' className={styles.profileImage} onClick={toggleDropdown} />
@@ -51,7 +62,7 @@ const Header = () => {
               <a href='/profile'>Profile</a>
               <a href='/settings'>Settings</a>
               <a href='/help'>Help</a>
-              <a href='/logout'>Logout</a>
+              <a href='#' onClick={handleLogout}>Logout</a>
             </div>
           )}
         </div>

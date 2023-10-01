@@ -70,4 +70,10 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK)
             .body(postService.updatePostTypeService(payload));
     }
+
+    @GetMapping("/get-post-images/{vecId}")
+    public ResponseEntity<Object> getPostImages(@PathVariable String vecId){
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(postService.getPostImageService(vecId));
+    }
 }

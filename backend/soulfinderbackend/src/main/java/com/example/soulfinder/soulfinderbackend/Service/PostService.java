@@ -33,21 +33,23 @@ public class PostService {
     
     public Post savePostService(Post postObject, MultipartFile[] files){
 
-        List<String> vectorImgIds = new ArrayList<>();
+        List<String> imgUrlList = new ArrayList<>();
         try {
-            vectorImgIds = vectorDBService.vectorDbImageUploader(files, postObject.getUserId());
+            imgUrlList = vectorDBService.vectorDbImageUploader(files, postObject.getUserId());
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
 
-        postObject.setVectorImgIds(vectorImgIds);
+        postObject.setImageUrls(imgUrlList);
         Post post = postRepos.insert(postObject);
 
         String postId = post.getPostId();
         
         mongoTemplate
             .update(User.class)
-            .matching(Criteria.where("firebaseUID").is(postObject.getUserId())) //?userId changed to firebaseUID
+            .matching(Criteria
+            .where("firebaseUID")
+            .is(postObject.getUserId())) //?userId changed to firebaseUID
             .apply(new Update().push("postIds").value(postId))
             .first();
         

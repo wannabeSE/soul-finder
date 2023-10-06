@@ -100,7 +100,7 @@ public class VectorDBService {
     
     public List<String> vectorDbImageUploader(MultipartFile[] files, String userId) throws IOException{ 
         
-        List<String> vectorImgIdList = new ArrayList<>();
+        List<String> imageUrlList = new ArrayList<>();
         Map<String, Object> dataSchema = new HashMap<>();
 
         for (MultipartFile file : files){
@@ -109,13 +109,13 @@ public class VectorDBService {
 
             System.out.println(uniqueID); //* for debugging purpose *//
 
-            vectorImgIdList.add(uniqueID);
+            //vectorImgIdList.add(uniqueID);
 
             String encodedString = fileEncoder(file);
 
             //? Storing image in cloud storage and getting image URL
             String imgUrl = cloudinaryImageUploadService.upload(file); 
-             
+            imageUrlList.add(imgUrl);
             VectorImage vectorImage = VectorImage.builder()
                 .vectorDbId(uniqueID)
                 .imgUrl(imgUrl)
@@ -141,7 +141,7 @@ public class VectorDBService {
                 System.out.println("Post Image upload success");
             }
         }
-        return vectorImgIdList;
+        return imageUrlList;
         
     }
 

@@ -97,53 +97,98 @@ public class VectorDBService {
 
         return encodedString;
     }
+
     
-    public List<String> vectorDbImageUploader(MultipartFile[] files, String userId) throws IOException{ 
-        
-        List<String> imageUrlList = new ArrayList<>();
+
+    public String uploadTest(MultipartFile file, String userId){
+
         Map<String, Object> dataSchema = new HashMap<>();
+        String uniqueID = UUID.randomUUID().toString();
 
-        for (MultipartFile file : files){
+        System.out.println(uniqueID); //* for debugging purpose *//
+        
+        //? Uploading to cloudinary storage bucket
+        String url = cloudinaryImageUploadService.upload(file);
 
-            String uniqueID = UUID.randomUUID().toString();
-
-            System.out.println(uniqueID); //* for debugging purpose *//
-
-            //vectorImgIdList.add(uniqueID);
-
+        try {
             String encodedString = fileEncoder(file);
-
-            //? Storing image in cloud storage and getting image URL
-            String imgUrl = cloudinaryImageUploadService.upload(file); 
-            imageUrlList.add(imgUrl);
-            VectorImage vectorImage = VectorImage.builder()
+            dataSchema.put("image", encodedString);
+        } catch (IOException e) {
+            System.out.println("encoding failed");
+        }
+        VectorImage vectorImage = VectorImage.builder()
                 .vectorDbId(uniqueID)
-                .imgUrl(imgUrl)
+                .imgUrl(url)
                 .userId(userId)
                 .build();
-                
-            //? Storing image meta data in MongDB
-            mongoDBServices.setVectorImgToMongoService(vectorImage);
-
-            //? Storing image meta data in Weaviate VectorDB
-            dataSchema.put("image", encodedString);
-            Result<WeaviateObject> result = client
-                .data()
-                .creator()
-                .withClassName(createdDBClassName)
-                .withProperties(dataSchema)
-                .withID(uniqueID)
-                .run();
-
-            if(result.hasErrors()){
-                System.out.println("Error Occurred");
-            }else{
-                System.out.println("Post Image upload success");
-            }
-        }
-        return imageUrlList;
         
+        //? Storing image meta data in MongoDB
+        mongoDBServices.setVectorImgToMongoService(vectorImage);
+
+        //? Storing image data in Weaviate VectorDB
+        Result<WeaviateObject> result = client
+            .data()
+            .creator()
+            .withClassName(createdDBClassName)
+            .withProperties(dataSchema)
+            .withID(uniqueID)
+            .run();
+
+        if(result.hasErrors()){
+            System.out.println("Error Occurred");
+        }else{
+            System.out.println("Post Image upload success");
+        }
+        return url;
     }
+
+    //! Deprecated Single Threaded method
+    // public List<String> vectorDbImageUploader(MultipartFile[] files, String userId) throws IOException{ 
+        
+    //     List<String> imageUrlList = new ArrayList<>();
+    //     Map<String, Object> dataSchema = new HashMap<>();
+
+    //     for (MultipartFile file : files){
+
+    //         String uniqueID = UUID.randomUUID().toString();
+
+    //         System.out.println(uniqueID); //* for debugging purpose *//
+
+    //         //vectorImgIdList.add(uniqueID);
+
+    //         String encodedString = fileEncoder(file);
+
+    //         //? Storing image in cloud storage and getting image URL
+    //         String imgUrl = cloudinaryImageUploadService.upload(file); 
+    //         imageUrlList.add(imgUrl);
+    //         VectorImage vectorImage = VectorImage.builder()
+    //             .vectorDbId(uniqueID)
+    //             .imgUrl(imgUrl)
+    //             .userId(userId)
+    //             .build();
+                
+    //         //? Storing image meta data in MongDB
+    //         mongoDBServices.setVectorImgToMongoService(vectorImage);
+
+    //         //? Storing image meta data in Weaviate VectorDB
+    //         dataSchema.put("image", encodedString);
+    //         Result<WeaviateObject> result = client
+    //             .data()
+    //             .creator()
+    //             .withClassName(createdDBClassName)
+    //             .withProperties(dataSchema)
+    //             .withID(uniqueID)
+    //             .run();
+
+    //         if(result.hasErrors()){
+    //             System.out.println("Error Occurred");
+    //         }else{
+    //             System.out.println("Post Image upload success");
+    //         }
+    //     }
+    //     return imageUrlList;
+        
+    // }
 
     
     public List<VectorImage> getAllVectorImgFromMongoService(){

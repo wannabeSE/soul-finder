@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,18 +33,42 @@ public class PostService {
     @Autowired
     private MongoTemplate mongoTemplate;
     
-    public Post savePostService(Post postObject, MultipartFile[] files){
+    public Post savePostService(MultipartFile[] files, Post postObject){
 
-        List<String> imgUrlList = new ArrayList<>();
-        try {
-            imgUrlList = vectorDBService.vectorDbImageUploader(files, postObject.getUserId());
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+        Executor executor = Executors.newFixedThreadPool(3);
+        CompletableFuture<String> imageUpload = new CompletableFuture<>();
+        List<CompletableFuture<String>> urlList = new ArrayList<>();
+
+        //* Multi-threading (Async)*/
+        for (MultipartFile file : files) {
+            
+
+             imageUpload = CompletableFuture.supplyAsync(() -> {
+                try {
+                    System.out.println("Executed by : " + Thread.currentThread().getName());
+                    return vectorDBService.uploadTest(file, postObject.getUserId());
+                
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+
+            }, executor);
+            urlList.add(imageUpload);
         }
 
-        postObject.setImageUrls(imgUrlList);
-        Post post = postRepos.insert(postObject);
+        //* Converting CompletableFuture List to List */
+        List<String> resultList = urlList.stream()
+                .map(CompletableFuture::join)  
+                .collect(Collectors.toList());
 
+        try {
+            postObject.setImageUrls(resultList);
+        } catch (Exception e) {
+            throw new RuntimeException("Image url setting failed");
+        }
+        
+        //? Saving post data in MongoDB
+        Post post = postRepos.insert(postObject);
         String postId = post.getPostId();
         
         mongoTemplate
@@ -55,6 +81,32 @@ public class PostService {
         
         return post;
     }
+    
+    //! Deprecated single thread method
+    // public Post savePostService(Post postObject, MultipartFile[] files){
+
+    //     List<String> imgUrlList = new ArrayList<>();
+    //     try {
+    //         imgUrlList = vectorDBService.vectorDbImageUploader(files, postObject.getUserId());
+    //     } catch (Exception e) {
+    //         System.out.println(e.getLocalizedMessage());
+    //     }
+
+    //     postObject.setImageUrls(imgUrlList);
+    //     Post post = postRepos.insert(postObject);
+
+    //     String postId = post.getPostId();
+        
+    //     mongoTemplate
+    //         .update(User.class)
+    //         .matching(Criteria
+    //         .where("firebaseUID")
+    //         .is(postObject.getUserId())) //?userId changed to firebaseUID
+    //         .apply(new Update().push("postIds").value(postId))
+    //         .first();
+        
+    //     return post;
+    // }
 
     public List<Post> getAllPostService(){
         List<Post> posts = postRepos.findAll();

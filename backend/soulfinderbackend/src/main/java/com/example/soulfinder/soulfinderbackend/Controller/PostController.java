@@ -3,6 +3,8 @@ package com.example.soulfinder.soulfinderbackend.Controller;
 
 import java.util.List;
 import java.util.Map;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,7 @@ public class PostController {
     public ResponseEntity<?> postToDb(@RequestParam("image") MultipartFile[] files ,Post postObject){
         return ResponseEntity.status(HttpStatus.OK)
             .body(postService
-            .savePostService(postObject, files)
+            .savePostService(files, postObject)
         );
     }
     @GetMapping("/get-post-by-id/{postId}")
@@ -76,4 +78,14 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK)
             .body(postService.getPostImageService(vecId));
     }
+
+    // @PostMapping("/test-image-post")
+    // public ResponseEntity<CompletableFuture<String>> postImages(@RequestParam("image") MultipartFile[] files){
+    //     return ResponseEntity.status(HttpStatus.OK)
+    //         .body(postService.imageUploadTest(files));
+    // }
+    // @PostMapping("/test-upload")
+    // public void postImagesTest(@RequestParam("image") MultipartFile[] files, Post post){
+    //     postService.newTestService(files, post);
+    // }
 }

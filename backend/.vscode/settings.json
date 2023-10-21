@@ -5,5 +5,6 @@
         "Gson",
         "soulfinder",
         "soulfinderbackend"
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }

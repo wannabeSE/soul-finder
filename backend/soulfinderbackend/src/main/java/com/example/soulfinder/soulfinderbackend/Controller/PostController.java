@@ -79,13 +79,5 @@ public class PostController {
             .body(postService.getPostImageService(vecId));
     }
 
-    // @PostMapping("/test-image-post")
-    // public ResponseEntity<CompletableFuture<String>> postImages(@RequestParam("image") MultipartFile[] files){
-    //     return ResponseEntity.status(HttpStatus.OK)
-    //         .body(postService.imageUploadTest(files));
-    // }
-    // @PostMapping("/test-upload")
-    // public void postImagesTest(@RequestParam("image") MultipartFile[] files, Post post){
-    //     postService.newTestService(files, post);
-    // }
+
 }

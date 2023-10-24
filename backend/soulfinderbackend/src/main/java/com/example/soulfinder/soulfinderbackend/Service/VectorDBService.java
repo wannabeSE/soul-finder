@@ -100,7 +100,7 @@ public class VectorDBService {
 
     
 
-    public String uploadTest(MultipartFile file, String userId){
+    public String postImageUploadService(MultipartFile file, String userId){
 
         Map<String, Object> dataSchema = new HashMap<>();
         String uniqueID = UUID.randomUUID().toString();

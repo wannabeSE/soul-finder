@@ -46,7 +46,7 @@ public class PostService {
              imageUpload = CompletableFuture.supplyAsync(() -> {
                 try {
                     System.out.println("Executed by : " + Thread.currentThread().getName());
-                    return vectorDBService.uploadTest(file, postObject.getUserId());
+                    return vectorDBService.postImageUploadService(file, postObject.getUserId());
                 
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());

@@ -62,8 +62,10 @@ public class VectorDbController {
     }
 
     @PostMapping("/delete-image-by-id/{id}")
-    public void deleteImageById(@PathVariable String id){
-        vDbService.deleteImageByIdService(id);
+    public ResponseEntity<String> deleteImageById(@PathVariable String id){
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(vDbService.deleteImageByIdService(id));
+        
     }
 
     @PostMapping("/search")

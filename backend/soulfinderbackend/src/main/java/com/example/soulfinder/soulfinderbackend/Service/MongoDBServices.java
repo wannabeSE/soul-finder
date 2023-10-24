@@ -21,10 +21,10 @@ public class MongoDBServices {
     private MongoTemplate mongoTemplate;
 
 
-    public void setVectorImgToMongoService(VectorImage vectorImage){
+    public VectorImage setVectorImgToMongoService(VectorImage vectorImage){
         
-
-        vectorImageRepo.insert(vectorImage);
+        return vectorImageRepo.insert(vectorImage);
+        
     }
 
     public Object returnImageMatches(String idToMatch){

@@ -53,6 +53,7 @@ public class PostService {
                 }
 
             }, executor);
+            
             urlList.add(imageUpload);
         }
 

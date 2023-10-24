@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,10 +102,26 @@ public class VectorDBService {
     }
 
     
+    public Result<WeaviateObject> uploadToVectorDb(String uniqueID, Map<String, Object> dataSchema){
+        
 
+        Result<WeaviateObject> result = client
+            .data()
+            .creator()
+            .withClassName(createdDBClassName)
+            .withProperties(dataSchema)
+            .withID(uniqueID)
+            .run();
+        return result;
+        
+    }
     public String postImageUploadService(MultipartFile file, String userId){
 
         Map<String, Object> dataSchema = new HashMap<>();
+
+        CompletableFuture<Result<WeaviateObject>> result = new CompletableFuture<>();
+        CompletableFuture<VectorImage> uploadToMongoDB = new CompletableFuture<>();
+        Executor executor = Executors.newFixedThreadPool(2);
         String uniqueID = UUID.randomUUID().toString();
 
         System.out.println(uniqueID); //* for debugging purpose *//
@@ -123,22 +142,48 @@ public class VectorDBService {
                 .build();
         
         //? Storing image meta data in MongoDB
-        mongoDBServices.setVectorImgToMongoService(vectorImage);
+        //mongoDBServices.setVectorImgToMongoService(vectorImage);
 
-        //? Storing image data in Weaviate VectorDB
-        Result<WeaviateObject> result = client
-            .data()
-            .creator()
-            .withClassName(createdDBClassName)
-            .withProperties(dataSchema)
-            .withID(uniqueID)
-            .run();
-
-        if(result.hasErrors()){
-            System.out.println("Error Occurred");
-        }else{
-            System.out.println("Post Image upload success");
+        uploadToMongoDB = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Executed by : " + Thread.currentThread().getName()+"uploadToMongo");
+            return mongoDBServices.setVectorImgToMongoService(vectorImage);
+        },executor);
+        try {
+            if(uploadToMongoDB.get() != null){
+                System.out.println("Vector image Inserted to mongo db");
+            }else{
+                System.out.println("failed to insert ");
+            }
+        } catch (Exception e) {
+            System.out.println("Exception occurred");
         }
+        
+        
+        
+        //? Storing image data in Weaviate VectorDB
+        // Result<WeaviateObject> result = client
+        //     .data()
+        //     .creator()
+        //     .withClassName(createdDBClassName)
+        //     .withProperties(dataSchema)
+        //     .withID(uniqueID)
+        //     .run();
+        result = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Executed by:" + Thread.currentThread().getName()+"uploadToWeaviate");
+            return uploadToVectorDb(uniqueID, dataSchema);
+            
+        }, executor);
+        try {
+            if(result.get().hasErrors()){
+            System.out.println("Error Occurred");
+            }else{
+                System.out.println("Successfully uploaded");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+        }
+        
         return url;
     }
 
@@ -285,7 +330,7 @@ public class VectorDBService {
         
     }
 
-    public void deleteImageByIdService(String idToDelete){
+    public String deleteImageByIdService(String idToDelete){
 
         Result<?> res = client.data().deleter()
             .withClassName(createdDBClassName)
@@ -293,9 +338,10 @@ public class VectorDBService {
             .run();
         if(res.hasErrors()){
             System.out.println("Image Deletion failed");
-            return;
+            return "Image Deletion failed";
         }
-        System.out.println("Deletion successful");
+        fileWriter(jsonResponseCreator(res.getResult()));
+        return jsonResponseCreator(res.getResult());
     }
     //*To check json response */
     public void fileWriter(String content){
